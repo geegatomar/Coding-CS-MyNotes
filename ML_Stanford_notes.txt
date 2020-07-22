@@ -1,0 +1,404 @@
+=========================================================================================================================
+
+STANFORD MACHINE LEARNING COURSE
+
+Regression: continuous value prediction
+Classification: classifying Discrete value prediction
+
+(use Octave for programming your algorithm)
+
+--------------------------------------------------------------------------------------------------------------
+Linear Regression (Supervised Learning)(Regression type)
+
+We use "squared error function" to minimize the cost function J.
+The algorithm "Gradient Descent" is used to minimize the cost function. 
+
+Tj = Tj - (alpha) * d/d(Tj) (J(parameters))
+
+alpha is the "Learning rate" and it determines "how big" a step we have taken each time.
+We simultaneously need to update the parameters in the gradient descent algorithm.
+"SIMULTANEOUS UPDATION" in gradient descent is important.
+If alpha (learning rate) is too small, I'll be taking baby steps and it will take too long to reach the minimum.
+If alpha is too large, I might over shoot and may fail to converge. 
+
+"BATCH Gradient descent" means that we are looking at all the batch of "m" training examples.
+
+Turns out that in gradient descent "for linear regression", the plot (the 2D plot) of the cost function formed is always convex and has a global minima.
+
+Matrix-Vector multiplication:
+Prediction = DataMatrix * ParametersVector  
+
+Make sure to do "feature scaling", else it would take longer for gradient descent to reach global minimum. 
+USe "Mean Normalization" for "feature scaling"
+X = (X - mean)/(range)                 : where range is standard deviation
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+CLASSIFICATION
+
+"LOGISTIC REGRESSION" is a "classification" algorithm.
+Sigmoid function returns a value between 0 and 1.
+
+A convex function is one which has only 1 minima (on the graph). A "CONVEX" function is necessary when we are using gradient descent to minimize the cost function. If its not convex, it will have multiple local minima and the value might converge to a local minima and not the required global minima.
+
+Hence, for logistic regression, we dont use the mean squares cost functionS. Instead we use a logarithmic functionS.  
+
+
+Underfitting (high bias)
+Overfitting (high variance)
+
+Adress overfitting:
+1. Reduce no. of features
+2. Regularization
+
+
+
+
+==========================================================================================================================
+
+MACHINE LEARNING UDACITY
+
+---------------------------------------------------------------------------------------------------------------
+NAIVE BAYES
+
+NAIVE BAYES algorithm to find decision surface (to draw boundary on the scatter plot)
+
+Naive Bayes is a classification algorithm for binary (two-class) and multi-class classification problems. The technique is easiest to understand when described using binary or categorical input values.
+
+It is called naive Bayes or idiot Bayes because the calculation of the probabilities for each hypothesis are simplified to make their calculation tractable. Rather than attempting to calculate the values of each attribute value P(d1, d2, d3|h), they are assumed to be conditionally independent given the target value and calculated as P(d1|h) * P(d2|H) and so on.
+
+This is a very strong assumption that is most unlikely in real data, i.e. that the attributes do not interact. Nevertheless, the approach performs surprisingly well on data where this assumption does not hold.
+
+It is a classification technique based on Bayes’ Theorem with an assumption of independence among predictors. In simple terms, a Naive Bayes classifier assumes that the presence of a particular feature in a class is unrelated to the presence of any other feature.
+
+P(A|B) = ( P(B|A) * P(A) ) / P(B)     
+
+(  also equal to  P(A and B)/P(B)  )
+
+
+to predict accuracy of model of naive_bayes, 
+either do 
+	model.score(Xtest, ytest)
+or 
+	from sklearn.metrics import accuracy_score
+	accuracy(ypred, ytest)
+
+
+Bayes Rule:
+	Prosterior Probability = (Prior Probability) * (Test Evidence)
+
+
+Naive bayes can be used to determine whom the text/email came from (classifying the writer)
+
+
+Naive Bayes algorithms are mostly used in sentiment analysis, spam filtering, recommendation systems etc. They are fast and easy to implement but their biggest disadvantage is that the requirement of predictors to be independent. In most of the real life cases, the predictors are dependent, this hinders the performance of the classifier.
+
+
+---------------------------------------------------------------------------------------------------------------------
+SVM (SUPPORT VECTOR MACHINES) (also called Large Margin Classifiers)
+
+We draw a line separating the data points to "classify" them.
+"Margin" : Margin is the distance between the separating line and the nearest point of the two classes.
+
+The line we choose maximizes the distance between the line and the nearest point on either side of the line.
+SVM puts correct classification first, and then maximizes the margin.
+
+very sensitive to training data : low bias
+
+SVM makes a "linear" "hyperplane" (hyperplane/ plane/ line) between the data sets.
+We can also do non-linear classification in svm, using "kernel"
+
+
+
+Parameters of SVM:
+1. C
+
+2. Gamma
+
+The gamma parameter defines how far the influence of a single training example reaches, with low values meaning ‘far’ and high values meaning ‘close’. In other words, with low gamma, points far away from plausible seperation line are considered in calculation for the seperation line. Where as high gamma means the points close to plausible line are considered in calculation.
+
+3. Kernel
+
+In machine learning, kernel methods are a class of algorithms for pattern analysis, whose best known member is the support vector machine (SVM). ... Any linear model can be turned into a non-linear model by applying the kernel trick to the model: replacing its features (predictors) by a kernel function.
+
+
+
+Kernels help you create more dimensions from the given features so as to transform the plot into linearly separable (by adding these features in higher dimensions)
+
+Kernels are used to force linear separability by taking the data into higher dimensions.
+
+Kernel Trick: It performs calculations "as if" it were in higher dimensions, but doesnt actually transform to higher dimensions. This saves computation.
+
+C (SVM C paramter): Controls tradeoff between "smooth decision boundary" and "classifying training points correctly"
+Large value of C means that you will get more training points correct. (wigglier)
+
+gamma (SVM gamma parameter): defines how far the influence of a single training example reaches.
+Low gamma value: Each training example has a far reach
+(even the far away points get taken into consideration when I'm drawing the decision boundary)
+Hence low value of gamma makes the decision boundary more linear, smoother.
+
+SVMs are much slower than Naive Bayes
+
+-----------------------------------------------------------------------------------------------------------------------
+
+DECISION TREE CLASSIFIER
+
+It makes a decision tree by classifying and asking questions at each stage which have answers of yes/no. This gives rectangular regions on the plot.
+
+Parameters of Decision Tree Classifier:
+
+1. min_samples_split	: Specifies the minimum no of samples in tht node in order for it to be classifiable further. Default is 2
+
+ex- min_samples_split of 50 gives higher accuracy than min_smaples_split of 2, as it avoids the chances of overfitting.
+
+
+Entropy: It controls how to decide where to split the data. (entropy is a measure of impurity in the sample)
+
+the maximal entropy you can have is when the samples are equally split between the two classes, entropy = 1 (max)
+minimum is entropy = 0.
+
+Information Gain: 
+Entropy gives measure of impurity in a node. In a decision tree building process, two important decisions are to be made — what is the best split(s) and which is the best variable to split a node.
+Information Gain criteria helps in making these decisions. Using a independent variable value(s), the child nodes are created. We need to calculate Entropy of Parent and Child Nodes for calculating the information gain due to the split. A variable with highest information gain is selected for the split.
+
+Decision tree algorithm "maximizes the information gain".
+
+information gain = entropy(parent) - [weighted average] entropy(children)
+
+in scikit learn, the deafult = 'gini', which is another measure of impurity. We can change it to criterion = 'entropy', which will calculate impurity with help of information gain.
+
+High bias: too general,  Low bias: Too specific tot he trained data (high variance)
+
+
+Disadvantage of decision tree is that its very prone to overfitting and hence we shall tune our parameters very carefully 
+------------------------------------------------------------------------------------------------------------------------------
+
+Some other algorithms:
+(Supervised Classification Algorithms)
+
+1. k nearest neighbors
+2. random forest
+3. adaboost (sometimes also called boosted decision tree)
+4. XGBoost (eXtreme Gradient Boosted trees)
+
+random forest and adaboost and "ensemble methods". Meta classifiers built from  usually decision trees.
+
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+REGRESSION
+
+Continuous (when theres some sort of order in the data)
+
+How to  judge your regression model?
+The best regression minimizes the sum of squares of the errors.
+Algorithms that do this:
+1. Gradient Descent
+2. Ordinary Least Squares (OLS) (this is used in sklearn's Linear Regression)
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+UNSUPERVISED LEARNING
+
+
+CLUSTERING
+
+We are given unlabeled data points which we need to group into clusters.
+We use K-Means algorithms.
+
+
+K-Means algorithm
+
+Take 2 parameter: k (number of clusters to form), input data pts
+It randomly initializes K cluster centroids. Then we do cluster assignment, assign each data point to its closest centroid. Then next step is to move the centroid. The centroid is moved towards the centre(centorid) of all the points that have been assigned to this original centorid.
+We assign each point to a centorid, and then we move the centorids. Continue iterating this.
+Choosing the right value of K: is done by the "Elbow method"
+
+Initial clustering is random. 
+
+Parameters in scikit learn:
+1. n_clusters : no. of clusters.
+2. max_iter: number of times you want to iterate and do the process of assigning points to centroid and then moving the centorid.
+3. n_init: This is the number of times it will randomly initialize the centroids. (by default its value is 10)
+
+K means is highly dependent on the initial clustering. A problem is that, the algorithm could get stuck in a "local minima" and never get out of it.
+Hence you nedd to run the k means algorithm multiple times on multiple different random initializations.
+
+-----------------------------------------------------------------------------------------------------------------------
+
+FEATURE SCALING
+
+
+X' = (X - Xmin) / (Xmax - Xmin)
+
+where X' is the new (rescaled) feature
+These transformed features will lie between 0 and 1.
+One probelm: If you have outliers in your dataset, it can really mess up the featur scaling as Xmin and Xmax might be way off due to outlier.
+
+This can be done in sklearn as:
+Preprocessing data
+use the MinMaxScaler()
+
+
+Example of algorithms affected by feature re-scaling:
+(Algorithms in which distances matter on the plot)
+SVM with RBF kernel
+K-Means clustering
+kNN algorithm
+
+
+Algorithms in which feature scaling causes no effect , ex: Decision trees, Linear regression
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+TEXT LEARNING
+
+Stopwords : 
+very common words like- I, you, are they, this, etc
+
+Stemmers : 
+all the words "responsivity", "response", "responsive" have the same stem which is "respons" and they all convey the same meaning/feeling. Hence, this helps reduce dimensions.
+
+Tf Idf representation:
+The TF(term freqeuency) IDF(inverse document frequency) rates the rare words more highly than common words. 
+
+-----------------------------------------------------------------------------------------------------------------------
+
+High bias:
+Pays little attention to data (too generalized)
+High error on training set
+
+
+High variance:
+Pays too much attention to data (Overfits) (does not generalize well)
+High error on test set. 
+ 
+-----------------------------------------------------------------------------------------------------------------------
+
+FEATURE SELECTION
+
+from sklearn.feature_selection import SelectPercentile
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+vectorizer = TfidfVectorizer()
+
+
+
+We need to do "regularization" on the data so that we select the right number of features. Too less feature => underfitting (high bias) , Too many features => overfitting (high variance). Hence we need to find the optimal number of features.
+
+
+
+
+REGULARIZATION IN REGRESSION
+
+Regularization :  Its a method for "automatically penalizing extra features."
+
+Lasso Regression:
+	minimize-  SSE(sum of squared error) + lambda * (coeff or regression)
+
+
+
+ 
+-----------------------------------------------------------------------------------------------------------------------
+
+PCA (PRINCIPAL COMPONENT ANALYSIS) 
+
+(general algorithm for "Feature Transformation" and "Dimensionality Reduction")
+
+"Dimensionality reduction" by changing the axis vectors by projecting data. Finds a lower dimension onto which we can projects the data set.
+
+PCA "finds a new coordinate system" obtained from the old one by "translation and rotation" only. It moves centre of coordinate system to the "centre of the data". And moves the x axis of coordinate system to the "principle axis of variation". 
+ex- reduce from 2 dimension to 1 dimension.
+
+PCA is very commonly used to solve problem of "dimensionality reduction".
+
+
+
+
+FEATURE SELECTION (continued)
+
+SelectKBest (selects the k best features out of all the features)
+SelectPercentile (select the given percentile number of features)
+
+
+
+PCA (continued)
+
+How to determine Principal Component?
+
+Variance - technical term in statistic, roughly the "spread" of data distribution (similair to standard deviation)   (this is not the variance [the willingness/flexibility of an algorithm to learn] from bias/variance)
+
+Maximum number of Principal Comppnents: minimum(no of training points, no of features)
+
+
+Review / definition of PCA:
+
+. Systematic way to transform input features into principal components.
+. Use principal components as new features.
+. PCs (principal components) are directions in data that maximize variance (minimize information loss) when you project / compress down onto them. 
+. More variance of data along a PC, the higher it is ranked.
+. most variance / most information -> first PC
+. max no of PCs = no. of input features.
+
+
+eigen faces example for PCA.
+
+
+ 
+-----------------------------------------------------------------------------------------------------------------------
+
+VALIDATION
+
+CROSS VALIDATION
+
+You split the data into k fold subsets and apply algorithm each time (ex- 10 fold cross validation) and calculate accuracy for each. Then calculate average accuracy.
+
+from sklearn.cross_validation import KFold
+
+KFold, just splits into equal sized parts, but it doesnt perform any shuffling.
+
+
+GridSearchCV:
+
+GridSearchCV is a way of systematically working through multiple combinations of parameter tunes, cross-validating as it goes to determine which tune gives the best performance. The beauty is that it can work through many combinations in only a couple extra lines of code.
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+EVALUATION METRICS
+
+A simple metric: ACCURACY
+[accuracy = ( no of items in a class labeled correctly ) / ( all items in that class )
+
+Shortcomings of "Accuracy" as a metric:  Its not ideal for "skewed" classes ( a dataset with too many datapoints in one cluster and very few in another)
+
+
+We need a better metric than accuracy, because we might have more inclination towards one error than the other. Example, cancer detection. A person with cancer detected negative is wayyy more dangerous than a person without cancer detected positive.
+
+
+CONFUSION MATRIX
+
+(the matrix formed by actual class and predicted class, giving categories of positive and negative from each)
+
+The main diagonal has correct classified data points. All the off-diagonal points are misclassified. 
+
+There can be "true positives", "false positives" (predicted to be positive, but was actually negative), "false negatives" (predicted to be -ve, but was actually +ve).
+
+PRECISION and RECALL
+
+Precision = (true positive) / (true positives + false positives)
+
+Recall = (true positive) / (true positive + false negative)
+
+
+===================================================================================================================================
+
+DEEP LEARNING WITH PYTORCH (Udacity Course)
+
+
+

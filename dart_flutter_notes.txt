@@ -1,0 +1,341 @@
+Learning Dart
+----------------------------------------------------------------------------------------------------------------------
+
+. dart files are saved with .dart extension (ex demo.dart)
+. it is run in bash by running command: dart demo.dart
+. if it doesnt identify the 'dart' command, it is because its not in its standard paths. So first, we put it in the PATH by updating the .bashrc file in home (~/.bashrc)(~ for home)
+ex: 
+(first is for flutter and second for dart)
+export PATH="$PATH:/home/shivangi/Projects/NeuralArt/flutter/bin"
+export PATH="$PATH:/home/shivangi/Projects/NeuralArt/flutter/bin/cache/dart-sdk/bin"
+----------------------------------------------------------------------------------------------------------------------
+
+.
+main()
+{
+	print("Hello World");
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+.
+main()
+{
+	var firstName = "Shiv";
+	String lastName = "Tom";
+	print(firstName + ' ' + lastName);
+}
+
+Here, the varibale var is not explicitly declared to be a 'String' type. But it interprets the type. So next time we cannot do firstName = 2.**
+Printing using string concatenation.
+----------------------------------------------------------------------------------------------------------------------
+
+. Taking input/output from the user
+For i/o operation , you need to import the io library:
+
+import 'dart:io';
+
+main()
+{
+	stdout.write("What is your name? ");
+	String name = stdin.readLineSync();
+	print("My name is $name");
+}
+
+
+. stdout.write() does not take cursor to next line.
+. stdout.writeln() and print() both take cursor to next line.
+. withing string, if we want to replace varibale with its value we use $ sign, it is called varibale interpolation.
+
+----------------------------------------------------------------------------------------------------------------------
+
+DATATYPES
+
+Strongly Typed Language : the type of a variable is decided at Compile time. ex : C++
+Dynamically Typed Language : The type of a variable is decided at Run time. ex : Python
+
+types in dart: 
+		int, double, String, bool, var, const, dynamic
+
+the type 'var' is static type varibale and once declared, its type cannot be changes, whereas the 'dynamic' type variable can change its type
+.....................................
+
+import 'dart:io';
+
+main() {
+  var strongVariable = 'Shiv';
+  dynamic weakVariable = 'Tom';
+
+  print(strongVariable + weakVariable);
+
+  weakVariable = 5;
+  print(weakVariable);
+}
+
+
+It's output will be:
+ShivTom
+5
+
+----------------------------------------------------------------------------------------------------------------------
+* Dart is an Object Oriented Language and everything is an object here. Even null type is an object 'null' 
+
+----------------------------------------------------------------------------------------------------------------------
+
+Converting one type to other using ** parsing **
+
+To convert a string '1' to an integer , we use the parse method in the int object as int.parse
+We also use built in method 'assert()' 
+ 
+
+main() {
+  // String -> int
+  var one = int.parse('1');
+  assert(one == 1);
+
+  // String -> double
+  var onePointOne = double.parse('1.1');
+  assert(onePointOne == 1.1);
+}
+
+
+
+
+To convert the integer 1 to string '1', we do this: 
+Note that as dart is an object oriented language, everything in dart is an object. So even 1 ( the integer 1) is also an object, hence we can do this:
+
+
+main() {
+  // int -> String
+  String oneAsString = 1.toString();
+  assert(oneAsString == '1');
+
+  // double -> String
+  String piAsString = 3.14159.toStringAsFixed(2);
+  assert(piAsString == '3.14');
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+const aConstNum = 0;
+print(aConstNum.runtimeType);
+
+	will print 'int'
+
+----------------------------------------------------------------------------------------------------------------------
+
+int num;
+print(num);
+
+	will print 'null' if nothing is assigned to the variable when its declared.
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Null Aware Operator ( (?.), (??), (??=) )
+
+
+class Num {
+  int num = 10;
+}
+
+main() {
+  var n = Num();
+  int number;
+
+  if (n != null) {
+    number = n.num;
+  }
+
+  print(number);
+}
+
+
+
+(?.)
+The null checking part can be replaced by just 1 line as:
+	
+	number = n?.num;
+
+(??)
+In above case if n is not null, only then it assigns number to n.num, and if it is null, it does nothing. If we want to cover the default case, we can do as:
+	
+	number = n?.num ?? 0;
+
+(here default value is 0 and number will be assigned 0 if n is null)
+
+
+(??=)
+If we want to assign a default value for it (if its null), then:
+void main(){
+	int number;
+	print(number ??= 10);
+	print(number);
+}
+
+the outpur here is 
+10
+10
+
+----------------------------------------------------------------------------------------------------------------------
+
+LOOPING
+
+forEach loop is a higher order function which takes another function as its parameter.
+
+void main()
+{
+	var numbers = [1, 2, 3];
+	numbers.forEach( (n) => print(n) );
+}
+
+
+this will output 
+1
+2
+3
+
+.........................
+
+Another simpler way would be to pass the function name and define the function outside, instead of defining whole function in brackets as:
+
+
+void main() {
+  var numbers = [1, 2, 3];
+  numbers.forEach(printNum);
+}
+
+void printNum(num) {
+  print(num);
+}
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+LISTS
+
+main() {
+  List names = ['Jack', 'Jill', 1, 10.56];
+
+  for (var name in names) {
+    print(name);
+  }
+}
+
+Here, the list name is of type List <dynamic>
+
+If we want to make it static, we can do as:
+ 	List <String> names = ['Jack', 'Jill']
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+To add extra features to an already existing class, we use inheretence. In dart, it is done by using ** extends ** keyword.
+
+class childClass extends parentClass { }
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+@override
+
+used to define the same named function in an inherited class. @override is written right above (over) the function which we are defining again.
+@override just points out that the function is also defined in an ancestor class, but is being redefined to do something else in the current class. It's also used to annotate the implementation of an abstract method.
+----------------------------------------------------------------------------------------------------------------------
+
+
+=============================================================================================================================
+
+FLUTTER
+
+In the main.dart,
+we are creating the root widget called MyApp()
+
+Inside our widget, we can specify different properties.
+We specify the "home" property and inside it, it has the Text Widget, inside which we can write our text. So the MaterialApp is our main widget here and it has all these properties such as "home", etc which are comma separated.
+The material app is our root widget and acts as a wrapper for the rest of the widgets inside it.
+
+You cannot write a widget alone directly inside a widget. It has to be written after a property and specified with a colon followed by the widget.
+
+VALUE FOR A PROPERTY IS A WIDGET.
+
+-----------------------------------------------------------------------------------------------------------------
+Keyboard shortcuts:
+
+To comment/uncomment the whole block of code: Ctrl + /
+To indent the whole block of code:   forward: Tab
+			             backward: Shift + Tab		
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+@override
+
+@override is written just above a function and it means that it will override the widgets written in the ancestor widget which it extends from.
+
+-----------------------------------------------------------------------------------------------------------------
+
+for "stateless widgets", we can use "hot reload" and as we save, it directly updates on the mobile app as well. You dont have to always keep doing a "hot restart"
+
+-----------------------------------------------------------------------------------------------------------------
+Text
+
+child : Text(
+//          'Hello Shivangi',
+//          style: TextStyle(
+//            fontSize: 40,
+//            fontWeight: FontWeight.bold,
+//            letterSpacing: 2.0,
+//            color: Colors.grey[700],
+//            fontFamily: 'IndieFlower',
+//          ),
+
+-----------------------------------------------------------------------------------------------------------------
+
+to load images in the app, there are two ways: 
+1. NetworkImage
+network , to load images from the web.
+
+child: Image(
+        image: NetworkImage('https://i.pinimg.com/564x/85/87/0d/85870d1e92330d72f2232d2bd86d531c.jpg')
+      )
+
+2. AssetImage
+asset images, the ones which we have saved in the files.
+make a folder, name it assets and store all your images inside it.
+
+
+child: Image(
+        image: AssetImage('assets/me.jpg'),
+-----------------------------------------------------------------------------------------------------------------
+
+Icons
+
+child: Icon(
+          Icons.access_alarm,
+          color: Colors.deepPurple,
+          size: 60.0,
+        ),
+ 
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+Buttons
+
+1. Raised Button (with shadow)
+2. Flat Button (without shadow)
+
+
+child: RaisedButton(
+          onPressed: () {
+            print('you clicked me');
+          },
+          child: Text('Click me!'),
+          color: Colors.cyanAccent,
+
+the onPressed property has an anonymous function, in which we have written 'you clicked me' which will be printed to the console when we click the button.
+
+-----------------------------------------------------------------------------------------------------------------
+
+

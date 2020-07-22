@@ -1,0 +1,10 @@
+.277A : Disjoint Set Union
+	similiar logic of q 217A
+	here, you maintain a vector of set of ints and ofcourse a parent array and all 		merging and finding of representative operations are performed on this 
+	*Better solution by senior*: maintain three arrays for vis, parent, siz and each ones index represents the language
+.520B : Two Buttons (use bfs)
+	trick: http://kirhobe.blogspot.com/2016/10/codeforces-problem-b-two-buttons.html
+
+.217A : DSU.
+	trick : https://github.com/frcepeda/Contest-Archive/blob/master/Codeforces/Practice/ice%20skating.c
+	use a vector of pairs instead, and use an array for storing parent

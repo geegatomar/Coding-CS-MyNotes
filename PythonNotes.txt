@@ -1,0 +1,63 @@
+===================================================================================
+PYTHON
+==================================================================================
+Python Command Line Arguements:
+
+The Python sys module provides access to any command-line arguments via the sys.argv. This serves two purposes −
+
+sys.argv is the list of command-line arguments.
+
+len(sys.argv) is the number of command-line arguments.
+
+Here sys.argv[0] is the program ie. script name.
+ ---------------------------------------------------
+#!/usr/bin/python
+
+import sys
+
+print 'Number of arguments:', len(sys.argv), 'arguments.'
+print 'Argument List:', str(sys.argv)
+
+Number of arguments: 4 arguments.
+Argument List: ['test.py', 'arg1', 'arg2', 'arg3']
+-------------------------------------------------
+
+. When known to the interpreter, the script name and additional arguments thereafter are turned into a list of strings and assigned to the argv variable in the sys module.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================================================
+
+PYTHON MODULES:
+
+. Python has a way to put definitions in a file and use them in a script or in an interactive instance of the interpreter. Such a file is called a module; definitions from a module can be imported into other modules or into the main module (the collection of variables that you have access to in a script executed at the top level and in calculator mode).
+. A module is a file containing Python definitions and statements. The file name is the module name with the suffix .py appended. Within a module, the module’s name (as a string) is available as the value of the global variable __name__. 
+.create a file called fibo.py
+import fibo
+This does not enter the names of the functions defined in fibo directly in the current symbol table; it only enters the module name fibo there.
+. If you intend to use a function often you can assign it to a local name
+fib = fibo.fib
+fib(500)
+
+. Each module has its own private symbol table, which is used as the global symbol table by all functions defined in the module. Thus, the author of a module can use global variables in the module without worrying about accidental clashes with a user’s global variables. On the other hand, if you know what you are doing you can touch a module’s global variables with the same notation used to refer to its functions, modname.itemname.
+
+

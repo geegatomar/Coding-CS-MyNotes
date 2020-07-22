@@ -1,0 +1,49 @@
+===================================================================================
+
+MACHINE LEARNING
+
+===================================================================================
+
+PANDAS
+
+. Series:
+Series is a data structure which is in the middle of a dict and a list
+---------------------------------------------------------------------------------
+animals = ['Tiger', 'Bear', None]
+print(pd.Series(animals))
+
+0    Tiger
+1     Bear
+2     None
+dtype: object                // none type if string
+
+---------------------------------------------------------------------------------
+animals = [8, 9, None]
+print(pd.Series(animals))
+
+0    8.0
+1    9.0
+2    NaN
+dtype: float64              //NaN (Not a Number) type if int
+--------------------------------------------------------------------------------
+loc and iloc are not methods, they are attributes. Hence use square brackets to query them, not paranthesis.
+
+==================================================================================
+Magic functions(or Dunder Functions) (Dunder here means double underscore):
+these start and end with 2 underscores ex: __init__
+
+Cellular Magic functions: begin with double %%
+
+%%timeit is an ipython magic function, which can be used to time a particular piece of code (A single execution statement, or a single method)
+
+
+=====================================================================================
+after series, the next, most widely and most is DataFrames
+
+DATA FRAMES
+
+
+
+
+
+

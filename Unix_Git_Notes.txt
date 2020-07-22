@@ -1,0 +1,605 @@
+
+. echo
+command to print
+
+. echo $PATH 
+is used to print the variable having name PATH
+this variable PATH is the variable having all the paths where any command is searched for
+
+*** whenever you type anything on the terminal... the first word is searched for in all of these paths listed from  echo $path
+    then every word you typed in that line are taken as arguements whihc are passed to that command(program) [the first word]  
+
+. $ 
+$ is used to print variable
+if you assign value 1 to variable var
+and if you print by doing echo var  : var will be printed on screen
+if you print by doing echo $var : now it understands that it needs to print value of the variable var, hence prints 1
+
+. ls
+lists all the files and directories in the present working directory
+
+. pwd
+gives the path/location of the present working directory
+
+.which
+used to tell the location of the command.. from which of those paths you found that command in
+
+.vim
+opens a text editor
+
+.chmod
+used to change the mode of the file...
+there are three permission modes for the file: 1.read(r) 2.write(w) and 3.execute(x)
+and there are three ways of viewing each of them: u:user, g:group, o:others
+
+. -l 
+used with ls command to give further details of the file such as its permissions... which come in form of 
+rwx rwx rwx
+command for this is example:  ls -l file.txt
+ 
+. bash
+bash is also a command(program) like python or any other program.. whatever we write is written in the language of bash
+
+. every executable file(a file that is to be run) we open are in 2 formats
+1. #! (she bang) followed by adress ... and then followed by content which is understood based on adresss(shell script)
+2. elf (executable and linking format)
+3. bash  built-in (ex- cd, alias)(man for these commands wont work)
+
+. ./filename
+dot slash means to search for it(the file) in the current directory
+the other way would be to look for it by giving full path
+
+. file is a program(command) to view the type of executable(  whether its an elf file or an interpreter)
+
+./1.py < input.txt > output.txt
+so take input from file input.txt
+to put output into file output.txt
+
+chmod +x filename
+
+to debug
+cc 1.c -ggdb -o 1
+./1 gdb
+
+diff file1 file2
+
+wc gives wordcount
+wc -l gives the linecount
+whatever you write in - (here -l) its an *option*
+ex : wc -c gives character count
+
+
+
+for the command cc, you write cc 1.c -o 1
+the -o here is the option to give the output file a name, it is followed by the arguement taking its name
+if not given, the file by default is saved as a.out
+
+
+malloc takes the size of memory to allocate and returns a pointer to that memory location
+pointer by default is of type void *
+hence we typecast it
+
+
+
+to copy the same text to the next line:
+esc, press yy (to copy to buffer), then press p(to paste)
+
+to complete words in terminal: use tab
+to complete words in gvim: use ctrl+p
+
+.chown : to change the owner
+
+
+
+Metacharacter	Meaning
+.	Any Character
+\w	A Word
+\W	Not a Word
+\d	A Digit
+\D	Not a Digit
+\s	Whitespace
+\S	Not Whitespace
+[def]	A Set of Characters
+[^def]	Negation of Set
+[e-q]	A Range of Characters
+^	Beginning of String
+$	End of String
+\n	Newline
++	One or More of Previous
+*	Zero or More of Previous
+?	Zero or One of Previous
+|	Either the Previous or the Following
+{6}	Exactly 6 of Previous
+{4, 6}	Between 4 and 6 or Previous
+{4, }	More than 4 of Previous
+
+
+. find . -name "*.jpg"
+
+. grep -n "New" states.txt          //-n gives the line number
+29:New Hampshire
+30:New Jersey
+31:New Mexico
+32:New York
+
+.  grep -c "New" states.txt        //-c gives the count of such lines
+4
+
+. alias creates a command that can be used as a substitute for a longer command that we use often.
+
+. The ~/.bash_profile is a text file that is run every time we start a shell, and it’s the best place to assign aliases.
+
+. The md5sum and shasum commands use different algorithms to create codes (called hashes or checksums) that are unique to the contents of a file.
+
+
+. The pipe (|) takes the output of the program on its left side and directs the output to be the input for the program on its right side.
+
+. echo "22 / 7" | bc -l             // bc is bench calculator, -l for decimal calculations
+3.14285714285714285714
+
+. for simple arithmetic, just use expr:
+expr 3 + 5
+8
+
+
+. In order to print the data in a variable, also called the value of a variable, we can use echo. When you want to retrieve the value of a variable you must use the dollar sign ($) before the name of the variable.
+chapter_number=5
+echo $chapter_number
+5
+
+. run a command like you would on the command line and store the result of that command in a variable. We can do this by wrapping the command in a dollar sign and parentheses ($( )) around a command. This syntax is called command substitution. 
+math_lines=$(cat math.sh | wc -l)
+echo $math_lines
+
+. Your script can accept arguments just like a command line program! The first argument to your script is stored in $1, the second argument is stored in $2, etc, etc. An array of all of the arguments passed to your script is stored in $@, and we’ll discuss how to handle arrays later on in this chapter. The total number of arguments passed to your script is stored in $#.
+
+.You can use the dollar sign and parentheses syntax (command substitution) to execute a command and save the output in a variable.
+math_lines=$(cat math.sh | wc -l)
+echo $math_lines
+## 7
+
+. read stores a string that the user provides in a variable.
+echo "Type in a string and then press Enter:"
+read response
+echo "You entered: $response"
+
+
+. in the case of the AND operator, the program on the right hand side of && will only be executed if the program on the left hand side of && has an exit status of 0. 
+true && echo "Program 1 was executed."
+false && echo "Program 2 was executed."
+## Program 1 was executed.
+
+. Commands on the right hand side of || are only executed if the command on the left hand side fails and therefore has an exit status other than 0. 
+true || echo "Program 1 was executed."
+false || echo "Program 2 was executed."
+## Program 2 was executed.
+
+
+. You can combine AND (&&) and OR (||) operators in commands, which are evaluated from left to right
+
+
+. let is used to forcefully "solve"
+ex: let var=3*4 with assign 12 to var, and without let var would be assigned '4*3'
+
+. echo $? gives the exit status of the last(previous) executed command
+if successfully executed, exit status will be 0
+else it will have a number (true has exit status 0 and false has 1)
+
+
+. Conditional expressions are always between double brackets ([[ ]]), and they either use logical flags or logical operators.
+If we wanted to see if one integer was greater than another we could use -gt, the greater than flag.
+
+
+.[[ 4 -gt 3 ]] && echo t || echo f
+this means that if the expression in [[]] is evaluated as true, then it will print t, else print f
+
+
+. These binary logical expressions compare two values, but there are also unarylogical expressions that only look at one value. For example, you can test whether or not a file exists using the -e logical flag.
+[[ -e math.sh ]] && echo t || echo f
+
+
+
+.
+Logical Flag				Meaning	Usage
+-gt	Greater Than			[[ $planets -gt 8 ]]
+-ge	Greater Than or Equal To	[[ $votes -ge 270 ]]
+-eq	Equal				[[ $fingers -eq 10 ]]
+-ne	Not Equal			[[ $pages -ne 0 ]]
+-le	Less Than or Equal To		[[ $candles -le 9 ]]
+-lt	Less Than			[[ $wives -lt 2 ]]
+-e	A File Exists			[[ -e $taxes_2016 ]]
+-d	A Directory Exists		[[ -d $photos ]]
+-z	Length of String is Zero	[[ -z $name ]]
+-n	Length of String is Non-Zero	[[ -n $name ]]
+
+
+. In addition to logical flags there are also logical operators. One of the most useful logical operators is the regex match operator =~. The regex match operator compares a string to a regular expression and if the string is a match for the regex then the expression is equivalent to true, otherwise it’s equivalent to false.
+
+[[ rhythms =~ [aeiou] ]] && echo t || echo f
+my_name=sean
+[[ $my_name =~ ^s.+n$ ]] && echo t || echo f
+## f
+## t
+
+.* means zero-or-more, and + means one-or-more. So the difference is that the empty string would match the second expression but not the first.
+
+
+.
+Logical Operator			Meaning	Usage
+=~	Matches Regular Expression	[[ $consonants =~ [aeiou] ]]
+=	String Equal To			[[ $password = "pegasus" ]]
+!=	String Not Equal To		[[ $fruit != "banana" ]]
+!	Not				[[ ! "apple" =~ ^b ]]
+
+
+. If the conditional expression if true then it will execute the code in between then and fi, otherwise it will skip over that code.
+echo "Start program"
+if [[ $1 -eq 4 ]]
+then
+  echo "Thanks for entering $1"
+else
+  echo "You entered: $1, not what I was looking for."
+fi
+echo "End program"
+
+
+.All Bash programs have an exit status. true has an exit status of 0 and false has an exit status of 1.
+Conditional execution uses two operators: AND (&&) and OR (||) which you can use to control what command get executed based on their exit status.
+Conditional expressions are always in double brackets ([[ ]]). They have exit an exit status of 0 if they contain a true assertion or 1 if they contain a false assertion.
+IF statements evaluate conditional expressions. If an expression is true then the code within an IF statement is executed, otherwise it is skipped.
+ELIF and ELSE statements also help control the flow of a Bash program, and IF statements can be nested within other IF statements.
+
+
+. echo ${#arr1[@]}
+to print the number of elements in an array
+
+
+. Bash has a very handy tool for creating strings out of sequences called brace expansion. Brace expansion uses the curly brackets and two periods ({ .. }) to create a sequence of letters or numbers. 
+echo {a..e}
+echo {W..Z}
+## a b c d e
+## W X Y Z
+
+
+.echo a{0..4}
+echo b{0..4}c
+
+## a0 a1 a2 a3 a4
+## b0c b1c b2c b3c b4c
+
+
+. echo {1..3}{A..C}
+
+## 1A 1B 1C 2A 2B 2C 3A 3B 3C
+
+
+.If you want to use variables in order to define a sequence you need to use the eval command in order to create the sequence
+ex
+start=4
+end=9
+echo {start..end}          ==> {start..end}
+echo {$start..$end}        ==> {4..9}
+eval echo {$start..$end}   ==> 4 5 6 7 8 9
+
+
+. You can combine sequences with a comma between brackets ({,})
+echo {{1..3},{a..c}}
+## 1 2 3 a b c
+
+
+.backtick is used to replace the contents of that command with its output 
+ex: ls -l `which vim`
+same job performed by $()
+ex: ls -l $(which vim)
+
+
+. 
+echo "Before Loop"
+for i in {1..3}
+do
+    echo "i is equal to $i"
+done
+echo "After Loop"
+
+## Before Loop
+## i is equal to 1
+## i is equal to 2
+## i is equal to 3
+## After Loop
+
+
+. FOR loops start with the syntax for [variable name] in [sequence] followed by do on the next line. The variable name that you define immediately after for will take on a value inside of the loop that corresponds to an element in the sequence you provide after in, starting with the first element of the sequence, followed by every subsequent element. Valid sequences include brace expansions, explicit lists of strings, arrays, and command substitutions. In this instance we’re using the brace expansion {1..3} which we know expands to the string "1 2 3". 
+The code executed in each iteration of the loop is written between do and done. 
+
+
+. while loop
+count=0
+while [[ count -lt 5 ]]
+do
+        echo "$count"
+        let count=$count+1
+done
+
+
+
+.Functions start with the function keyword followed by the name of the function and curly brackets ({}).
+Functions are small, reusable pieces of code that behave just like commands.
+You can use variables like $1, $2, and $@ in order to provide arguments to functions, just like a Bash script.
+Use the source command in order to read in a Bash script with function definitions so that you can use your functions in your shell.
+Use the local keyword to prevent your function from creating or modifying global variables.
+Be sure to echo the results of your function (if there are any) so that they can be captured with command substitution.
+
+
+
+
+
+========================================================================
+VIM COMMANDS:
+
+ESC ==> Command mode
+I   ==> Edit mode from beginning of current line
+A   ==> Edit mode from end of current line
+i   ==> Edit mode from current position
+R   ==> Overwrite mode from current position
+r   ==> replace character under cursor
+x   ==> delete character under cursor
+d   ==> delete chunk
+    ==> w -> word
+    ==> $ -> end of line
+    ==> d -> current line
+    ==> ) -> sentence
+    ==> } -> paragraph
+
+y   ==> yank chunk
+    ==> w -> word
+    ==> $ -> end of line
+    ==> y -> current line
+    ==> ) -> sentence
+    ==> } -> paragraph
+
+p   ==> Paste in position
+P   ==> paste in previous line
+
+.   ==> Repeat the last editing action
+u   ==> undo last change
+U   ==> Undo all changes to the current line
+
+=================================================================================
+
+GIT
+
+
+. Git tracks changes to plain text files (code files and text documents).
+A directory where changes to files are tracked by Git is called a Git repository.
+Change your working directory, then run git init to start a repository.
+You can track changes to a file using git add [names of files].
+You can create a milestone about the state of your files using git commit -m "message about changes since the last commit".
+To examine the state of files in your repository use git status.
+
+
+.git init
+git status
+git add readme.txt
+git rm --cached readme.txt     // to remove
+git commit -m "added readme.txt"
+git add -A    // if you want to track all of the changes to all the files in our directory
+git reset --soft HEAD~   // we can undo the most recent commit with this command
+
+
+
+. Git commands have their own man pages. You can access them with git help [name of command]. 
+git help status
+
+
+. If you want to see a list of your Git commits, enter git log into the console:
+
+
+
+. if you want to see a list of your Git commits
+git log
+
+
+
+. Git can also help show the differences between unstaged changes to your files compared to the last commit.
+git diff readme.txt
+
+
+.  We can either git add the files we’ve made changes to in order to track those changes, or we can use git checkout in order to remove all of the changes we’ve made to a file to restore its content to what was present in the last commit.
+git checkout readme.txt
+
+
+
+. A file in your Git repository called .gitignore can list names of files and sub-folders, or simple regular expressions (whatever you can use with ls) in order to specify files which should never be tracked. Each line of a .gitignore file should specify a file or group of files that should not be tracked by Git. 
+
+
+. You can list all of the available branches with the command git branch:
+git branch
+## * master
+The star (*) indicates which branch you’re currently on. The default branch that is created is always called master.
+
+
+
+. We can make my-new-feature the current branch using git checkout with the name of the branch:
+git checkout master
+
+## Switched to branch 'master'
+
+git branch
+
+## * master
+##   my-new-feature
+
+
+
+. git branch -d my-new-feature        // delete a branch
+
+
+
+.  Git merge. Merging allows you to elegantly combine the changes that have been made between two branches. Let’s merge the changes we made in the update-readme branch with the master branch. Git incorporates other branches into the current branch by default. 
+git merge update-readme
+
+
+.  Branching is part of what makes Git so powerful since it enables parallel developments on the same code base. 
+
+
+
+
+. But what if there are two commits in two separate branches that make different edits to the same line of text? When this occurs it is called a conflict. Let’s create a conflict so we can learn how they can be resolved.
+
+
+
+. The line between <<<<<<< HEAD and ======= shows the version of the conflicted line on the current branch. In Git terminology the HEAD represents the most recent commit on the branch which is currently checked out (which is master in this case). The line between ======= and >>>>>>> update-readme shows the version of the line on the update-readme branch. In order to resolve this conflict, all we need to do is open readme.txt with nano so we can delete the lines we want to get rid of.
+
+
+. One neat feature of GitHub is that readme files are rendered on the repository page so you can write documents which explain the contents of your repository.
+
+
+. Git branching allows you and others to work on the same code base together.
+You can create a branch with the command git branch [name of branch].
+To switch to a branch use git checkout [name of branch].
+You can combine a branch with your current branch by using git merge.
+
+
+
+. git remote
+git remote add origin https://github.com/seankross/my-first-repo.git
+git push -u origin master
+
+
+
+
+
+
+======================================================================================
+GIT MARKDOWN LANGUAGE
+
+
+
+
+Markdown is a markup language. Markup languages are sets of rules for adding decorative features to text. The most popular markup language is HTML, but you might have also heard of XML and LaTeX. Markdown is a powerful markup language because it’s small, intuitive, and readable when it’s written as plain text. GitHub transforms Markdown files (which end in the file extension .md) into simple HTML web pages in your repository. If there is a file called README.md in any folder in your repository, then that file is rendered to HTML and displayed on GitHub. 
+
+
+
+. make file called README.md
+
+. write this in the file:
+
+
+
+.
+# This is a large heading
+
+## This is a smaller heading
+
+And as **imagination** bodies forth,
+The forms of things *unknown*, the poet’s pen,
+Turns them to shapes and gives to airy nothing,
+A local *habitation* and a **name**.
+
+- This is
+- an unordered
+- list
+
+1. This is
+2. an ordered
+3. list
+
+Here is `some code` in the middle of a sentence.
+
+```
+This is
+a block
+of code
+```
+
+Here is how you make [a link](https://www.wikipedia.org/).
+
+![This is an image.](https://github.com/yihui/xaringan/releases/download/v0.0.2/karl-moustache.jpg)
+
+
+
+
+.git add -A
+git commit -m "added README.md"
+git push
+
+
+. Since we set up a default remote repository the first time we pushed, we can now simply enter git push in order to send our latest commits to the master branch on the origin remote.
+
+
+
+. Markdown rules:
+
+Pound signs (#, ##) make headings.
+A word surrounded by single asterisks (*word*) makes that word italicized.
+A word surrounded by double asterisks (**word**) makes that word bold.
+You can create lists with hyphens (-) or numbers (1., 2., 3.).
+Code can be placed in the middle of a line with single backticks (`code`).
+A code block can be created by putting code in between a set of triple backticks (```).
+You can insert a link with brackets and parentheses ([Link text here](http://jhu.edu)).
+You can use an image with an exclamation point, and a link to an image (![Alt text here](http://jhu.edu/jeff.jpg))
+
+===================================================================================
+
+(git continued)
+
+
+. A pull request allows you to interactively compare two different branches before you merge them so you can either go ahead with the merge or provide feedback to whoever opened the pull request. Essentially a pull request allows a person to ask another person if they’re willing to incorporate changes on one branch into another branch.
+
+
+
+. Like a local Git repository, remote repositories on GitHub can have multiple branches. Let’s push this commit to the update-readme branch on GitHub.
+
+git push origin update-readme
+
+Notice that we needed to specify which remote we were pushing to since GitHub didn’t previously know about the existence of the update-readme branch. When you perform a git push, only the commits on the current branch are sent to the remote repository. That way you can create local branches that cannot be accessed from the remote repository, unless you explicitly push them to GitHub.
+
+
+
+. forking
+git clone https://github.com/[your-github-username]/the-unix-workbench.git
+make changes... then push and make pull request
+
+
+.
+You can use GitHub you create and host remote Git repositories.
+A remote Git repository is a Git repository that is always connected to the internet.
+List remote repositories with git remote.
+Add remote repositiories with git remote add [name-of-remote] https://github.com/[username]/[repo-name].git
+Add commits to your remote repository with git push [name-of-remote] [name-of-branch] or just git push if you’ve set up a default remote and branch.
+To merge commits on a remote repository into your local repository use git pull [name-of-remote] [name-of-branch] or just git pull if you’ve set up a default remote and branch.
+A pull request allows you to interactively compare two different branches before you merge them.
+GitHub Pages allows you to host websites written in Markdown for free!
+Forking a repository allows you to make changes to a copy of a public repository. You can then open a pull request if you think your changes should be merged into the upstream repository!
+
+
+========================================================================
+NEPHOLOGY
+
+. ssh connects you to computers that are connected to the internet. The template for the command to connect is ssh [username]@[IP address].
+. To disconnect from an ssh session use the logout command.
+
+
+. The arguments for copying files from a server with scp have the following general structure:
+scp [username]@[IP address]:path/to/file/on/server path/on/my/computer
+
+
+. Now let’s try uploading a file to our server. The arguments for doing this are just the swapped arguments for downloading a file from a server
+scp path/on/my/computer [username]@[IP address]:path/to/file/on/server
+
+
+
+. One of the most popular command line programs for talking to other servers is curl. The curlcommand allows us to send requests and information to other servers.
+. To download a file with curl, we simply need to provide the -O flag and the URL of the file:
+curl -O http://website.org/textfile.txt
+
+
+
+.scp copies files between a cloud computer and your personal computer. Use the -r flag in order to copy directories.
+curl allows you to send HTTP requests to other servers. Use the -Oflag to download files with curl.
+ps -A lists all of the programs running in the background of your computer.
+cron allows you to schedule when programs are run. Use crontab -e in order to edit the cron table.
+
+
+-----------------------------------------------------------------------------------------------------------
+lspci : command in bash to tell about the hardware information. To find out abt the gpu on my laptop

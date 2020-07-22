@@ -1,0 +1,594 @@
+(pyimagesearch)
+
+============================================================================================================================
+
+DEEP LEARNING FOR COMPUTER VISION (ADRIAN ROSEBROCK)
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+should work on virtual environment
+
+to create virtual environment (with name cv):
+	mkvirtualenv cv -p python3
+
+to work on the virtual environment:
+	workon cv
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+How does python know where to look for a package when you do import X?
+Do import sys. And then 
+	for path in sys.path:
+		print(path)
+This will show all the paths which also has one path of 'site-packages', which holds all the packages that you have installed in that virtual environment directory. 
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+os.path.sep : in Linux is the '/'
+if image path is "/dataset_name/class/image.jpg" and we do:
+	label = imagePath.split(os.path.sep)[-2]
+then, label gets assigned the value 'class' (second last on separating by '/', in the path
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+import argparse
+
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--image", required=True, help="Path to image")
+args = vars(ap.parse_args())
+
+
+
+In the above code,
+ap is an object of the class ArgumentParser(). Then we call the add_argument() method on the ap object to add the argument --image whose shorthand is -i. The parse_args() is a method called on the ap object which returns a Namespace ( Namespaces in Python are implemented as Python dictionaries, this means it is a mapping from names (keys) to objects (values).). The vars() function takes Namespace as the argument and returns a dict which is stored in args.
+
+
+In command line, we will write:
+	python3 file_name.py --image dog.jpg
+
+The variables will have values:
+ap.parse_args() :  Namespace(image='dog.jpg')
+args		:  {'image': 'dog.jpg'}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+to show the image, write:
+
+	image = cv2.imread(args["image"])
+	cv2.imshow("DogImage", image)
+	cv2.waitKey(0)
+
+cv2.imread() takes the image path as argument and returns a numpy object of shape (width, height, channels) . 
+cv2.imshow() takes the name of display window as first argument and the numpy object as second argument. 
+It should be followed by cv2.waitKey(0), which says that once image is displayed, it will stay until you press anykey on keyboard.
+call to cv2.waitKey pauses the execution of the script until we press a key on our keyboard. Using a parameter of 0 indicates that any keypress will un-pause the execution.
+
+image.shape is in format of (height, width, 3)
+
+
+we cam also save the image by writing:
+	cv2.imwrite("name_to_save_as.jpg", image)
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+To display image using matplotlib, the code is:
+
+
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimage
+
+image = mpimage.imread("dog.jpg")
+plt.imshow(image)
+plt.show()
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+If you read image using opencv, and then display using matplotlib, you will see weird colored image (not original colors). This is because:
+OpenCV represents RGB images as multi-dimensional NumPy arrays, but in reverse order!
+This means that images are actually represented in BGR order rather than RGB! All we need to do is convert the image from BGR to RGB:
+
+plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+plt.show()
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+we can draw lines, rectangles, circles using cv2 as
+
+
+canvas = np.zeros((300, 300, 3), dtype="uint8")
+red = (0, 0, 255)                                          # (b, g, r)
+cv2.line(canvas, (0, 0), (300, 300), red, 5)               
+# starting coordinates, ending coordinates, color, thickness of line
+
+cv2.rectangle(canvas, (20, 20), (60, 200), red, 2)      
+# rectangle with border of thickness 2 
+
+cv2.rectangle(canvas, (20, 20), (60, 200), red, -1)
+# solid filled rectangle
+
+cv2.circle(canvas, (centerX, centerY), r, white)
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+np.random.randn
+
+np.random.randn()     : gives one floating value
+np.random.randn(5)    : gives an array (1D) of 5 elements
+np.random.randn(3, 4) : gives a 2D array of (3, 4) dimension.
+
+
+
+np.random.rand behaves same way, except that it gvies values btw 0 and 1 only
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Why did we learning drawing in cv2?
+
+While drawing by itself doesn’t allow us to visually understand the contents of an image using OpenCV, these operations allow us to draw Regions of Interest (ROIs) surrounding objects in an image.
+
+motion detection techniques to determine where in a video stream movement is. Once we have localized the movement, we draw a bounding box surrounding the motion on each individual frame. In the context of home surveillance, this results in a system that can detect a human (or animal, object, etc.) as it moves around the room.
+
+While OpenCV’s drawing functions may not have directly helped us locate, detect, or recognize an object in an image, they did allow us to visualize the results, which is still part of our image processing/computer vision pipeline.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Image transformations:
+Translation, rotation, resizing, cropping, flipping.
+
+
+
+def translate(image, x, y):
+	M = np.float32([[1, 0, x], [0, 1, y]])
+	shifted = cv2.warpAffine(image, M, (image.shape[1], image.shape[0]))
+
+
+
+def rotate(image, angle, center = None, scale = 1.0):
+	(h, w) = image.shape[:2]
+	if center is None:
+		center = (w // 2, h // 2)
+	M = cv2.getRotationMatrix2D(center, angle, scale)
+	rotated = cv2.warpAffine(image, M, (w, h))
+	return rotated
+
+
+def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
+	dim = None
+	(h, w) = image.shape[:2]
+	if width is None and height is None:
+		return image
+	if width is None:
+		r = height/float(h)
+		dim = (int(w * r), height)
+	else:
+		r = width / float(w)
+		dim = (width, int(h * r))
+	resized = cv2.resize(image, dim, interpolation = inter)
+	return resized
+
+
+
+
+For flipping:
+Horizontal flip :   flipped = cv2.flip(image, 1)
+Vertical flip   :   flipped = cv2.flip(image, 0)
+
+For both horiz and vertical :	 flipped = cv2.flip(image, -1)
+
+
+
+
+Cropping is performed using image slicing, ex: image[20:100, 40:220]
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Masking
+Masking is used to crop certain parts of image using a "mask", using concept of bitwise operations (and, or, xor, not).
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Python's os module (os : operating system)
+
+os.getcwd()	: get current working directory
+os.listdir()	: list all files in the current directory
+os.mkdir('name'): make a directory
+os.rmdir('name'): remove directory
+os.path.join()  : takes arguments of paths and concatenates them to give a filepath
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Why k-NN is not good for dealing with images?
+
+
+This behavior is in contrast to most machine learning algorithms (and all neural networks), where we spend a large amount of time upfront training our model to obtain high accuracy, and, in turn, have very fast classifications at testing time.
+Finally, the k-NN algorithm is more suited for low-dimensional feature spaces (which images
+are not). 
+It’s also important to note that the k-NN algorithm doesn’t actually “learn” anything – the algorithm is not able to make itself smarter if it makes mistakes; it’s simply relying on distances in an n-dimensional space to make the classification.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+gradient = trainX.T.dot(error)
+
+why this is true is because:
+loss if defined as (error)**2, where error is (y1-y) .Hence => loss = (y1 - y)**2 . We need to find the gradient, which is obtained by differentitating the loss function. Hence, to differentiate we use "chain rule" to obtain .... 
+gradient = 2*(y1-y)*(y') = 2(error)*(x).
+because y = w.x, and we are finding gradient as differentiation of loss function wrt the weights (the variable/parameter we are optimizing). Hence differentiation of y with respect to w is x.
+=> gradient = 2*error*x.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Why are activation functions important?
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+.dot() is used for 1D arrays
+.matmul() is used for multi-dimensional arrays
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Vanilla gradient descent performs weight update "once" for every epoch
+
+Stochastic Gradient descent performs weight updates for every batch of training data, implying multiple updates per epoch. This leads to faster, more stable convergence.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Yield returns a generator object, and to view each element of it, we can use iterator to iterate over the generator object.
+
+Advantage:
+Generators dont hold entire result in memory, it yields each result at a time
+
+
+Yield can be used when theres lots of data in csv file which you are unable to read all at once. So we yield them in batches, and iterate over each of the batch.
+
+Yield is also used in mini-batch stochastic gradient descent, to make the batches from the bulk data.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Normal gradient descent might get stuck in flat regions and there is zero slope and hence no change. Hence, use "MOMENTUM BASED GRADIENT DESCENT". This keeps track of previous records and hence avoids this situation of getting stuck in a valley / flat region. It converges much faster also.
+Problem with "momentum based gradient descent" is that it converges too fast and might sometimes overshoot the local minima. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+.argmax()
+This function returns indices of the maximum values are returned along with the specified axis.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+To load the mnist dataset, Adrian used 
+from sklearn.datasets import fetch_mldata
+
+But this was for older versions of scikit-learn version==0.19
+
+In latest version,
+do this:
+
+from sklearn.datasets import fetch_openml
+dataset = fetch_openml("mnist_784")
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+In model.compile(), if you give metrics=["accuracy"], then 
+H.history["accuracy"] and H.history["val_accuracy"] will work
+
+( H.history["acc"] will not work)
+
+
+[ Metric values are displayed during fit() and logged to the History object returned by fit()  ]
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+fit, transform and fit_transform
+
+
+"fit" computes the mean and std to be used for later scaling. (just a computation), nothing is given to you.
+
+"transform" uses a previously computed mean and std to autoscale the data (subtract mean from all values and then divide it by std).
+
+"fit_transform" does both at the same time. So you can do it with 1 line of code instead of 2.
+
+
+
+
+For X training set, we do "fit_transform" because we need to compute mean and std, and then use it to autoscale the data. For X test set, well, we already have the mean and std, so we only do the "transform" part.
+
+Either you "fit" on the training data and then apply "transform" to both training and testing data separately. Or you can apply "fit_transform" to the training data and then "transform" to the test data. Both will perform exact same function.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+img_to_array converts a "PIL image" to a "NumPy array"
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Difference between categorical_crossentropy and sparse_categorical_crossentropy
+
+If your targets are one-hot encoded, use categorical_crossentropy.
+But if your targets are integers, use sparse_categorical_crossentropy
+
+
+Use sparse categorical crossentropy when your classes are mutually exclusive (e.g. when each sample belongs exactly to one class) and categorical crossentropy when one sample can have multiple classes or labels are soft probabilities (like [0.5, 0.3, 0.2]).
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+How to detect overfitting(in the graph) ?
+
+If the training loss stagnates or continues to decrease, while the validation loss increases, this indicated overfitting.
+(training loss and validation loss curves start to diverge)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+What are callbacks?
+
+A callback is a set of functions to be applied at given stages of the training procedure. You can use callbacks to get a view on internal states and statistics of the model during training.
+
+You define and use a callback when you want to automate some tasks after every training/epoch that help you have controls over the training process. This includes stopping training when you reach a certain accuracy/loss score, saving your model as a checkpoint after each successful epoch, adjusting the learning rates over time, and more. 
+
+from keras.callbacks import LearningRateScheduler
+from keras.callbacks import BaseLogger
+from keras.callbacks import ModelCheckpoint
+from keras.callbacks import EarlyStopping
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+INHERETENCE:
+
+class Parent:
+	def __init__(self, ...):
+		...
+
+class Child(Parent):
+	...
+
+This is how you inherit the "Parent" class into the "Child" class.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+The super() method:
+super() gives you access to methods in a superclass from the subclass that inherits from it.
+a common use case is building classes that extend the functionality of previously built classes.
+
+Example using super():
+
+class Rectangle:
+    def __init__(self, length, width):
+	self.length = length
+        self.width = width
+
+class Square(Rectangle):
+    def __init__(self, length):
+        super().__init__(length, length)
+
+
+The primary use case of this is to extend the functionality of the inherited method.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Base(object):
+    def __init__(self):
+        print "Base created"
+
+class ChildA(Base):
+    def __init__(self):
+        Base.__init__(self)
+
+class ChildB(Base):
+    def __init__(self):
+        super(ChildB, self).__init__()
+
+ChildA() 
+ChildB()
+
+
+
+super() lets you avoid referring to the base class explicitly, which can be nice. But the main advantage comes with multiple inheritance, where all sorts of fun stuff can happen.
+Note that the syntax changed in Python 3.0: you can just say super().__init__() instead of super(ChildB, self).__init__()
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+@staticmethod        (used for utility functions that dont access proprties of class)
+
+@staticmethod decorator
+The @staticmethod is a built-in decorator that defines a static method in the class in Python. A static method doesn't receive any reference argument whether it is called by an instance of a class or by the class itself. 
+
+The static method receives reference of neither. Hence it doesn't have any arguments.
+
+Static method knows nothing about the class and just deals with the parameters.
+Static methods have a limited use case because, like class methods or any other methods within a class, they cannot access the properties of the class itself.
+
+However, when you need a utility function that doesn't access any properties of a class but makes sense that it belongs to the class, we use static functions.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+JSON in Python
+
+JSON can store Lists, bools, numbers, tuples and dictionaries. But to be saved into a file, all these structures must be reduced to strings. It is the string version that can be read or written to a file. Python has a JSON module that will help converting the datastructures to JSON strings. Use the import function to import the JSON module.
+
+
+To convert python dictionary into a json string:
+	json_string = json.dumps(datastore)
+
+To convert back json string to a datastrucutre:
+	datastore = json.loads(json_string)
+
+
+
+Writing a json file:
+
+	with open(filename, 'w') as f:
+        	json.dump(datastore, f)
+
+Reading json:
+	with open(filename, 'r') as f:
+		datastore = json.load(f)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+JSON
+
+we use JSON to store and exchange data
+Its a standardized format the community uses to pass data around.
+
+The process of encoding JSON is usually called serialization. This term refers to the transformation of data into a series of bytes (hence serial) to be stored or transmitted across a network.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+LabelEncoder, LabelBinarizer, OneHotEncoder : differences
+
+
+x = np.array(["a", "b", "c", "a", "a", "c", "a", "b", "a" ,"a", "c", "a", "a"])
+
+le = LabelEncoder()
+le.fit_transform(x)
+=>	array([0, 1, 2, 0, 0, 2, 0, 1, 0, 0, 2, 0, 0])
+
+
+lb = LabelBinarizer()
+lb.fit_transform(x)
+=>	array([[1, 0, 0],
+       [0, 1, 0],
+       [0, 0, 1],
+       [1, 0, 0],
+       [1, 0, 0],
+       [0, 0, 1],
+       [1, 0, 0],
+       [0, 1, 0],
+       [1, 0, 0],
+       [1, 0, 0],
+       [0, 0, 1],
+       [1, 0, 0],
+       [1, 0, 0]])
+
+
+
+x = x.reshape(len(x), 1)
+ohe = OneHotEncoder()
+ohe.fit_transform(x)
+
+=>	<13x3 sparse matrix of type '<class 'numpy.float64'>'
+	with 13 stored elements in Compressed Sparse Row format>
+
+
+OneHotEncoder takes a 2D array as input. 
+LabelEncoder returns integer encodes for the output as a 1D array. But this can cuase problems for us as it might cause bias due to 2 > 1 > 0. Hence, in between the data, prefer using LabelBinarizer which returns a set of column vectors as a 2D array.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Choosing the correct loss function:
+
+For classification, use Cross entropy.
+For regression, use MSE (mean squared error)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Batch Normalization
+
+
+Why batch normalization?
+
+1. Speeds up training
+2. Decreases importance of initial weights
+3. Regularizes the model
+
+
+Normalizing the data means to normalize according to the particular batch of data inputs that we have. Normalizing means x' = (x - mu)/(sd),   subtracting the mean and then dividing by the standard deviation. Hence, its better to normalize the data before feeding it to a network.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Difference b/w cv2.imread() and load_img()
+
+
+import cv2
+test_image = cv2.imread('file.jpg')
+test_image = cv2.resize(test_image, (64, 64, 3))
+
+from keras.preprocessing.image import load_img, img_to_array
+test_image = load_img('file.jpg', target_size=(64, 64, 3))
+test_image = img_to_array(test_image)
+
+
+cv2 will store image as BGR, whereas keras will store it as RGB.
+OpenCV reads images in BGR format whereas in keras, it is represented in RGB. To get the OpenCV version to correspond to the order we expect (RGB), simply reverse the channels
+Another point I'd like to add is that cv2.imread usually reads in images in uint8 precision. Examining the output of your keras loaded image, you can see that the data is in floating point precision so you may also want to convert to a floating-point representation, such as float32
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Blurring image
+
+cv2.blur(image, (3, 3))
+will take average of all pixels under the kernel area and replaces central element with this average. 
+
+cv2.GaussianBlur(image, (3, 3), 0)
+similiar to the avergaing blur above, but this will take weighted average(more preference given to the closer pixels). It also takes a third argument: the standard deviation in the x axis direction.
+
+cv2.medianBlur(image, 3)
+instead of replacing the central pixelby average of the pixels coming under the kernel (like we did in avergaing blur), here we take the median of all those pixels.
+
+cv2.bilateralBlur(image, 3, 21, 21)
+cv2.bilateralFilter(), which was defined for, and is highly effective at noise removal while preserving edges. But the operation is slower compared to other filters.
+arguments are : (image, filtersize, sigma, sigma)
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+cv2 Thresholding
+
+If pixel value is greater than a threshold value, it is assigned one value (may be white), else it is assigned another value (may be black). The function used is cv2.threshold. First argument is the source image, which should be a grayscale image. Second argument is the threshold value which is used to classify the pixel values. Third argument is the maxVal which represents the value to be given if pixel value is more than (sometimes less than) the threshold value. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Pickle and Json
+
+Both are used to serialize the python code.
+
+
+Difference between them:
+
+Pickle supports binary serialization format whereas JSON is for simple text serialization format. ... It means JSON cannot serialize and de-serialize every python object. Whereas pickle can serialize any arbitrary Python object like lists, tuples, and dictionaries. Even classes and methods can be serialized with Pickle.
+
+
+Unlike json module which serializes objects as human-readable JSON string, the pickle module serializes data in the binary format.
+
+The json module allows us to serialize only the basic Python types (like int, str, dict, list etc.). If you need to serialize custom objects you would have to supply your own serialization function. However, the pickle module works with a wide variety of Python types right out of the box, including the custom objects you define.
+
+
+The interface provided by the pickle module is same as than of json module and consists of dump()/load() and dumps()/loads() functions.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Serialization and Deserialization 
+
+
+Serialization: 
+The process of converting an object into a special format which is suitable for transmitting over the network or storing in file or database is called Serialization.
+
+Deserialization: 
+It is the reverse of serialization. It converts the special format returned by the serialization back into a usable object.
+
+
+
+The dumps() function works exactly like dump() but instead of sending the output to a file-like object, it returns the output as a string.
+
+Similarly, loads() function is as same as load() but instead of deserializing the JSON string from a file, it deserializes from a string.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Adding border to image
+
+cv2.copyMakeBorder(gray, 8, 8, 8, 8, cv2.BORDER_REPLICATE)
+
+
+
+
+

@@ -1,0 +1,96 @@
+WSGI
+The Web Server Gateway Interface is a simple calling convention for web servers to forward requests to web applications or frameworks written in the Python programming language. 
+If you're using a standard web framework such as Django, Flask, or Bottle, or almost any other current Python framework, you don't need to worry about how frameworks implement the application side of the WSGI standard.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Decorator in python
+
+def make_pretty(func):
+    def inner():
+        print("I got decorated")
+        func()
+    return inner
+
+
+def ordinary():
+    print("I am ordinary")
+
+
+
+we call this
+pretty = make_pretty(ordinary)
+
+Here make_pretty() is the decorator which takes in a function and adds some more functionality (decoration) to it and returns it.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+@make_pretty
+def ordinary():
+    print("I am ordinary")
+
+
+is equivalent to
+
+
+def ordinary():
+    print("I am ordinary")
+ordinary = make_pretty(ordinary)
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+__name__
+
+
+__name__ is just a convenient way to get the import name of the place the app is defined. Flask uses the import name to know where to look up resources, templates, static files, instance folder, etc
+
+
+When you run any well-written stand-alone python script which is not referring to any other script, the value of __name__ variable is equal to __main__.
+
+
+
+The second feature is about importing one python script into another. In such a scenario, there seem to be two different scopes which can be considered as the main() function. The first scope can be the __main__ variable of the currently running program and the second the scope of the __main__ variable of the imported script used in the current program.
+
+So which __main__ variable will be used 
+
+when you run a function from the imported script, the __name__ variable will evaluate to the actual name of the script and not equal to __main__.
+
+But when you find out the value of the name variable from the current program, without referring to the imported script, it will evaluate to __main__ as expected, as that is the scope of the program at level 0 indention.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+GET and POST requests using Python
+
+
+This post discusses two HTTP (Hypertext Transfer Protocol) request methods  GET and POST requests in Python and their implementation in python.
+
+What is HTTP?
+HTTP is a set of protocols designed to enable communication between clients and servers. It works as a request-response protocol between a client and server.
+A web browser may be the client, and an application on a computer that hosts a web site may be the server.
+
+So, to request a response from the server, there are mainly two methods:
+
+GET : to request data from the server.
+POST : to submit data to be processed to the server.
+
+
+Now, to make HTTP requests in python, we can use several HTTP libraries like:
+httplib
+urllib
+requests
+
+The most elegant and simplest of above listed libraries is Requests.
+------------------------------------------------------------------------------------------------------------------------------------
+
+smtplib is a python library to send mails
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Flask is sitting on the server. Our browser sends packets from our system, which are received by the Flask 
+
+
+
+
+
+
+

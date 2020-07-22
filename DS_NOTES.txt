@@ -1,0 +1,55 @@
+. structure is a class where all members are public by default
+. Syntax to use new operator: To allocate memory of any data type, the syntax is:
+  pointer-variable = new data-type;
+
+. new operator of c++ does the job of malloc in c (dynamic memory allocation)
+--------------------------------------------------------------------------------------------------------------
+#include <iostream>
+
+using namespace std;
+
+struct node
+{
+    int data;
+    node *next;
+};
+
+class linked_list
+{
+private:
+    node *head,*tail;
+public:
+    linked_list()
+    {
+        head = NULL;
+        tail = NULL;
+    }
+
+    void add_node(int n)
+    {
+        node *tmp = new node;
+        tmp->data = n;
+        tmp->next = NULL;
+	
+	if(head == NULL)
+        {
+            head = tmp;
+            tail = tmp;
+        }
+        else
+        {
+            tail->next = tmp;
+            tail = tail->next;
+        }
+    }
+};
+
+int main()
+{
+    linked_list a;
+    a.add_node(1);
+    a.add_node(2);
+    return 0;
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,81 @@
+VECTORS
+
+transformations applied to a vector:  scaling, rotation, shear
+
+Basis: Youtube video by 3B1B, to visualize the concepts of vectors in space and the concept of **basis** and dependent and independent vectors.
+
+Think of matrices as transformations in space. When a matrix is multiplied with a vector, it is similiar to the vector being passed through a function (Transformation) to result in another vector.
+
+Matrix multiplication, multiplying two matrices, represents applying one transformation after another. 
+How the vectors are transformed by matrices is the heart of linear algebra.
+
+The columns of your matrix tell you where the basis vectors land.
+
+The determinant of the matrix determines how much the entire plot has been scaled by. It represents the area covered by the new positions of where basis vectors of i and j sit on.
+
+If the basis vectors are not linearly independent, the determinant will be zero and the inverse matrix will not exist.
+
+In matrix multiplication, AB = C,
+C(ik) = A(ij) + B(jk)
+
+
+Orthonormal matrix means all the column vectors are orthogonal (at 90 degrees) to each other and are all unit vectors. So orthonormal matrix when multiplied by its inverse gives identity matrix. (A)(AT) = I. Hence for orthonormal matrix (AT) = A-1.
+Hence for orthonormal matrix, transpose is equal to its inverse.
+
+Gram schmidt process is used ot construct a orthogonal basis set by performing certain transformations.
+
+Eigenvalues and Eigenvectors
+Eigenvectors are those vectors which remain on the same span both before after applying a matrix transformation to it. Eigen values are the values by which these vectors are stretched on that same axis.
+for a linear transformation, an eigenvector is a vector which, after applying the transformation, stays in the same span.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+In vector calculus, the Jacobian matrix of a vector-valued function in several variables is the matrix of all its first-order partial derivatives.
+Jacobian matrices are used to transform the infinitesimal vectors from one coordinate system to another. We will mostly be interested in the Jacobian matrices that allow transformation from the Cartesian to a different coordinate system
+
+Hessian
+
+The J matrix (jacobian) holds differentiation values of each function with respect to each variable.
+This jacobian is used in back propagation
+
+
+The Newton-Raphson method (also known as Newton's method) is a way to quickly find a good approximation for the root of a real-valued function f ( x ) = 0 f(x) = 0 f(x)=0. It uses the idea that a continuous and differentiable function can be approximated by a straight line tangent to it
+
+X(n+1) = X(n) - f(Xn)/f'(Xn)
+
+Newtons raphson allows us to use gradient to step towards the solution of the function (where its value equals to zero)
+
+Newton raphson does not do very well around areas of local maxima/minima where slope of curve is zero and f'(x) has value zero. This causes sudden changes in values of Xn and it oscillates and takes longer to converge, or may not converge.
+
+The "grad" (gradient) of a function is the column vector formed by writing the partial derivatives of the function with each of its variables.
+S(n+1) = S(n) - y * grad(Sn)
+
+Lagrange multipliers is used to solve optimization problems with a "constraint" in them.
+del(f) = lambda * del(g)
+
+
+
+X^2 (kai squared)  provides us with an indication of the fitting parameter, but not the uncertainty related to the particular measurable variables. The uncertainty is determined through the parameter sigma σ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

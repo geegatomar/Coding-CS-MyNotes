@@ -1,0 +1,807 @@
+DYNAMIC PROGRAMMING
+
+
+Majority of the Dynamic Programming problems can be categorized into two types:
+
+1. Optimization problems.
+2. Combinatorial problems.
+
+The optimization problems expect you to select a feasible solution, so that the value of the required function is minimized or maximized. Combinatorial problems expect you to figure out the number of ways to do something, or the probability of some event happening.
+
+Every Dynamic Programming problem has a schema to be followed:
+
+Show that the problem can be broken down into optimal sub-problems.
+Recursively define the value of the solution by expressing it in terms of optimal solutions for smaller sub-problems.
+Compute the value of the optimal solution in bottom-up fashion.
+Construct an optimal solution from the computed information.
+
+
+===============================================================================
+Q. Leetcode 123: Best Time to Buy and Sell Stock III
+
+We can use dynamic programming to solve it.
+Let’s assume T[i][j][k], where i means the ith day, j means jth transactions, and k, when k = 0 means buying, k = 1 means selling. For example, T[5][1][0] means the minimum cost after buying in the first transaction from first day to 5th day, T[7][2][1] means the maximum profits after selling in the second transaction from first day to 7th day.
+So T[i+1][1][0] = min(T[i][1][0], prices[i]), T[i+1][1][1] = max(T[i][1][1], prices[i]-T[i][1][0]), T[i+1][2][0] = min(T[i][2][0], prices[i]-T[i][1][1]), T[i+1][2][1] = max(T[i][2][1], prices[i]-T[i][2][0]).
+finally, T[n][2][1] is the answer.
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        vector<vector<vector<int>>> dp(prices.size() + 1, vector<vector<int>>(3, vector<int>(2, 0)));
+        dp[0][1][0] = numeric_limits<int>::max();
+        dp[0][2][0] = numeric_limits<int>::max();
+        for (int i = 0; i < prices.size(); ++i) {
+            dp[i+1][2][1] = max(dp[i][2][1], prices[i] - dp[i][2][0]);
+            dp[i+1][2][0] = min(dp[i][2][0], prices[i] - dp[i][1][1]);
+            dp[i+1][1][1] = max(dp[i][1][1], prices[i] - dp[i][1][0]);
+            dp[i+1][1][0] = min(dp[i][1][0], prices[i]);
+        }
+        
+        return dp[prices.size()][2][1];
+    }
+};
+
+
+======================================================================================
+
+LeetCode 152. Maximum Product Subarray
+
+Trick : Kadanes trick
+keep three variables: max_ending_here, min_ending_here, max_so_far
+
+=============================================================================
+
+C. George and Job
+
+DP problem. Top Down got memory limit exceeded due to stack overflow, hence use BottomUp
+At each stage i have two options, either i take that subset of m elements (and now solve a smaller subproblem of chossing for k-1 subsets and go back m indices as subsets shall not be overlapping) or I dont choose that subset and go to index-1 with k more subsets to choose.
+
+=================================================================================
+
+C. Hamburgers (371C)
+
+Use Binary Search Trick.
+Concept similiar to the bok allocation question. The isValid() function is important. take low as 0 and high as somehighvalue... then we need to maximize the value for which we can make those many hams...
+
+**** for the max value of x, we use binary search ***
+
+moneyneeded = max(0, (b*x - nb)*pb) + max(0, (s*x - ns)*ps) + max(0, (c*x - nc)*pc);
+if(moneyneeded <= amt)
+	return 1;
+
+
+
+Editorial:
+
+
+371C - Hamburgers
+
+Let's use binary search approach. For given number of hamburgers (say, x) let's find the minimal number of money needed to cook them. Say, for one hamburger Polycarpus needs c b bread pieces, c s sausages pieces, c c cheese pieces. So for x hamburgers he needs: c b·x, c s·x and c c·x pieces (by types). Since he already has n b, n s and n c pieces, so he needs to buy:
+
+bread: max(0, c b·x - n b),
+sausages: max(0, c s·x - n s),
+cheese: max(0, c c·x - n c).
+So the formula to calculate money to cook x hamburgers is:
+
+f(x) = max(0, c b·x - n b)·p b + max(0, c s·x - n s)·p s + max(0, c c·x - n c)·p c
+Obviously, the function f(x) is monotonic (increasing). So it is possible to use binary search approach to find largest x such that f(x) ler.
+
+
+==========================================================================================
+322B - Ciel and Flowers
+
+If there are no "mixing bouquet" then the answer will be r/3 + g/3 + b/3. One important observation is that: There always exist an optimal solution with less than 3 mixing bouquet.
+
+The proof is here: Once we get 3 mixing bouquet, we can change it to (1 red bouquet + 1 green bouquet + 1 blue bouquet)
+
+So we can try 0, 1, 2 mixing bouquet and make the remain 3 kind of bouquets use above greedy method. Output one with largest outcome.
+
+
+
+code:
+
+long total = r/3 + g/3 + b/3;
+    if(r >= 1 && g >= 1 && b >= 1){total = max(total , 1 + (r - 1)/3 + (g - 1)/3 + (b - 1)/3);}
+    if(r >= 2 && g >= 2 && b >= 2){total = max(total , 2 + (r - 2)/3 + (g - 2)/3 + (b - 2)/3);}
+
+========================================================================================================
+431C k-Trees
+
+This problem can be solved by dinamic programming.
+Let's Dp[n][is] — number of ways with length equals to n in k-tree, where if is = 1 — there is exists edge with length at least d, is = 0 — lengths of all edges less then d.
+Initial state Dp[0][0] = 1.
+Transition — iterate all edges which can be first on the way in k-tree, then problem transform to the same, but with less length of the way (because subtree of vertex son is the k-tree).
+
+Dp[n][0] = Dp[n-1][0] + ... + Dp[n-min(d-1,n)][0] Dp[n][1] = Dp[n-1][1] + ... + Dp[n-min(d-1,n)][1] + (Dp[n-d][0] + Dp[n-d][1]) + ... + (Dp[n-min(n,k)][0] + Dp[n-min(n,k)][1])
+
+
+
+
+
+int n, k, d;
+    cin >> n >> k >> d;
+    dp[0][0] = 1;
+    dp[0][1] = 0;
+    
+    for(int i = 1 ; i <= n ; ++i)
+    {
+        dp[i][0] = dp[i][1] = 0;
+        
+        for(int j = 1 ; j <= k ; ++j)
+        {
+            if(i-j < 0) break;
+            
+            if(j < d)
+            {
+                add(dp[i][0], dp[i-j][0]);
+                add(dp[i][1], dp[i-j][1]);
+            }
+            else
+            {
+                add(dp[i][1], dp[i-j][0]);
+                add(dp[i][1], dp[i-j][1]);
+            }
+        }
+    }
+    cout << dp[n][1] << "\n";
+    return 0;
+
+
+
+
+
+==============================================================================================================
+322B. Maximum Absurdity
+
+Let’s build the array of partial sums, which will permit to find the sum in any segment of the array in O(1). Let's iterate through the number a (the left edge of the leftmost segment) in descending order. Now we need to find among segments of length k, starting from position which index is greater than or equal to a + k, a segment with the maximum sum. Since we search a in descending order, we can maintain this segment during the transition from a to a - 1.
+
+Asymptotics of the solution — O(n).
+
+
+===========================================================================================================================
+455A. Boredom
+
+In this task we need to maximize the sum of numbers that we took. Let precalc array cnt. cnt[x] — number of integers x in array a. Now we can easily calculate the DP:
+
+f(i) = max(f(i - 1), f(i - 2) + cnt[i]·i), 2 ≤ i ≤ n;
+
+f(1) = cnt[1];
+
+f(0) = 0;
+
+The answer is f(n).
+
+Asymptotics — O(n).
+
+================================================================================================================
+276C. Little Girl and Maximum Sum
+
+C — Little Girl and Maximum Sum
+In this problem the sensible thing to do is to count the amount of times we are going to add some index of this sequence; then the maximal number gets assigned to the index that is added the most, and so on. In order to count the amount of times we referenced each index, we can use the Binary Indexed Tree structure to store cumulative sums with update and retreival times of O(log n) (a great tutorial for this structure can be found here: http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=binaryIndexedTrees).
+
+My code: http://www.codeforces.com/contest/276/submission/3182445
+
+Time complexity: O(n log n)
+
+Memory complexity: O(n).
+
+
+
+----------
+
+void update(ll x, ll val)
+{
+        while(x <= n)
+        {
+                tree[x] += val;
+                x += (x & -x);
+        }
+}
+ 
+ll read(ll x)
+{
+        ll sum = 0;
+        while(x > 0)
+        {
+                sum += tree[x];
+                x -= (x & -x);
+        }
+        return sum;
+}
+
+
+-------------
+while(q--)
+        {
+                ll x, y;
+                cin >> x >> y;
+                update(x, 1);
+                update(y + 1, -1);
+        }
+ 
+        for(i = 1; i <= n; i++)
+        {
+ 
+                newv[i-1] = read(i);
+               
+        }
+
+
+=================================================================================================================
+
+166E. Tetrahedron
+
+idea::
+bascically we need to find no of all possible strings which have starting  and ending character D and inside characters may be A,B,C,D  also  no two adjecent characters characters can be same ..
+
+
+ we use a  4*n dp [4][n];
+ 4 index are for A,B,C,D.. and
+  dp[1][i]== no of string possible  by fixing ith character to A.
+  => dp[1][i] =dp[2][i-1]+dp[3][i-1]+dp[4][i-1]   since last character must be different ..
+
+similarly dp[2][i-1]=...........
+ finally ans=dp[1][n]+dp[2][n]+dp[3][n]  since last character cant be D so not include dp[4][n];;
+
+
+
+base case dp[1][1]=0,dp[2][1]=0,dp[3][1]=0, dp[4][1]=1.. since 1st element can only D
+
+
+--------------------------------------
+
+solution (USING DP AND BOTTOM-UP)
+
+int dp[10000002][5] = {0};
+ 
+        dp[1][1] = 1; dp[1][2] = 1; dp[1][3] = 1;
+        for(int steps = 2; steps <= n; steps++)
+        {
+                for(int i = 1; i <= 4; i++)
+                {
+                        int sum = 0;
+                        for(j = 1; j <= 4; j++)
+                        {
+                                if(i != j)
+                                {
+                                        sum += dp[steps - 1][j] ;
+                                        sum %= 1000000007;
+                                }
+                        }
+                        dp[steps][i] = sum % 1000000007;
+                }
+        }
+        cout << dp[n][4] % 1000000007;
+
+---------------------------------------------------------
+ANOTHER WAY TO SOLVE SUCH PROBLEMS OF LINEAR RECURRENCE (which takes O(n)),  in O(logN) USING *** MATRIX EXPONENTIATION ***
+
+(Refer rachit jains video: https://www.youtube.com/watch?v=TTtOpv6Hrcg
+
+------------------------------------------------------------------------------------------
+Let f[A][j] is the number of ways from D to A by going j steps,as same,f[B][j], f[C][j] and f[D][j],
+we know f[D][0] = 1, f[A, B, C][0] = 0(because the ant starts at D).
+
+then you get four equations below:
+
+f[A][j] = f[B][j - 1] + f[C][j - 1] + f[D][j - 1]
+
+f[B][j] = f[A][j - 1] + f[C][j - 1] + f[D][j - 1]
+
+…
+
+f[D][j] = …
+
+you can solve this problem in O(n),the answer is f[D][n] mod 1e9+7.
+
+but it’s too slow.you can express the four equations by matrix.then it’s obvious to solve the problem by
+matrix fast power algorithm in O(lg n).
+
+========================================================================================================================================
+251A - Points on Line
+
+TWO POINTER TRICK
+Let's select the rightmost point of our triplet. In order to do this we can iterate over all points in ascending order of their X-coordinate. At the same time we'll maintain a pointer to the leftmost point which lays on the distance not greater than d from the current rightmost point. We can easily find out the number of points in the segment between two pointers, excluding the rightmost point. Let's call this number k. Then there exist exactly k * (k - 1) / 2 triplets of points with the fixed rightmost point. The only thing left is to sum up these values for all rightmost points.
+
+===========================================================================================================================
+
+453A. Little Pony and Expected Maximum (Probability)
+
+idea:
+The derivation of the formula in tutorial is quite simple — 
+Let us assume that we have Xj which denotes the number of throws when the maximum number appearing on dice is j, So Xj is given by — 
+Xj = jn — (j-1)n
+(Assume that we have n places to fill such that their maximum is j, So the arrangement should contain at least one j, so consider each permutation formed by numbers from 1 to j and subtract each permutation formed by numbers from 1 to (j-1). The resulting value will contain each permutation such that it contains at least one j)
+Now finding out the expected value is quite easy
+
+
+Enumerate the maximum number, the distribution will be a n-dimensional super-cube with m-length-side. Each layer will be a large cube minus a smaller cube. So we have:
+
+		sum += i*(pow(i/m, n) - pow((i-1)/m, n) )
+
+Calculate in may cause overflow, we could move the divisor into the sum and calculate (i / m)n instead.
+           
+
+=====================================================================================================================
+
+222B. Cosmic Table
+
+Let’s store the order of the rows and columns of table. Thus, row[x] is the number of the row x in the initial table and column[x] is the number of column x in the initial table. Then, the value of an element in the row x and column y in the current table is equal to t[row[x], column[y]], where t — initial table. When we get the update request, we need to swap the x-th element and the y-th element in the corresponding array. Complexity — O(n * m + k).
+
+
+code:
+
+ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    int n,m,k,x,y;
+    cin>>n>>m>>k;
+    int col[m+1]={0},row[n+1]={0},a[n+1][m+1]={0};
+    char c;
+ 
+    for (int i=1;i<=n;i++)
+        for (int j=1;j<=m;j++)
+            cin>>a[i][j];
+ 
+    for (int i=1;i<=n;i++)
+        row[i]=i;
+ 
+    for (int i=1;i<=m;i++)
+    col[i]=i;
+ 
+    for (int i=1;i<=k;i++){
+        cin>>c>>x>>y;
+        if (c=='g')
+            cout<<a[row[x]][col[y]]<<"\n";
+        else if (c=='r')
+            swap(row[x],row[y]);
+        else
+            swap(col[x],col[y]);
+    }
+
+
+TRICK 1:
+To make the row[] and col[] array and swap them everytime there is a swap of row/column. And then to print, should print v[row[x]][col[y]]
+
+TRICK 2:
+Even after you did that, it will time out (TLE). Sp trick to do:
+		ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+====================================================================================================================
+
+414B. Mashmokh and ACM
+
+I got idea of solving this from the k-trees question(similiar recursive solution) (to which i later applied dp).
+In normal top-down dp solution in my first try, i got TLE. So i used the GCD FUNCTION smartly. (important)
+(realize that i did top-down and got an error does not mean that i have to do bottom up. If the error was Memory limit exceeded, it would have been due to stack overflow, then the solution to fix that would be bottom up. But here it was TLE, so we had to think of some way to reduce computation.
+
+
+int f(int n, int k, int prev)
+{
+        if(k == 0)
+                return 1;
+        int sum = 0;
+        int g;
+        for(int i = prev; i <= n; i++)
+        {
+ 
+                if(i % prev == 0)
+                {
+                        g = gcd(i, prev);
+                        if(dp[k-1][i] == -1)
+                        {
+                                dp[k-1][i] = f(n, k-1, i);
+                        }
+                        sum += dp[k-1][i];
+                }
+                sum %= 1000000007;
+                i += g-1;
+ 
+        }
+        return dp[k][n] = sum % 1000000007;
+}
+
+
+======================================================================================================================================
+
+235A - LCM Challenge
+
+Trick:
+
+if(n==1)
+            ans=1;
+        else if(n==2)
+            ans=2;
+        else if(n==3)
+            ans=6;
+        else if(n%2==0)
+        {
+            if(n%3==0)
+                ans=(n-1)*(n-2)*(n-3);
+            else
+                ans=n*(n-1)*(n-3);
+        }
+        else
+            ans=n*(n-1)*(n-2);
+        cout<<ans<<endl;
+
+======================================================================================================================================
+
+118D. Caesar's Legions
+
+Do like any other dp question. First, write recursive solution, then see what all variables are changing in each recursive function call. Based on that, memoize it. In this question youll need four states for your dp[101][101][12][12] in my solution.
+
+======================================================================================================================================
+
+339D. Xenia and Bit Operations
+
+Concept: Use SEGMENT TREE in which updation takes O(log n).
+Two main functions to write in this are buildTree and updateTree.
+here:
+
+
+
+void buildTree(vector<int> &arr, vector<int> &tree, int start, int end, int treeNode)
+{
+ 
+        
+        if(start > end)
+                return;
+        if(start == end)
+        {
+                tree[treeNode] = arr[start];
+                return;
+        }
+ 
+        int mid = (start + end)/2;
+ 
+       
+        buildTree(arr, tree, start, mid, 2 * treeNode);
+        buildTree(arr, tree, mid + 1, end, 2 * treeNode + 1);
+ 
+ 
+        if(n % 2 == 0)
+        {
+                if((int)floor(log2(treeNode)) % 2 == 0)
+                        tree[treeNode] = tree[2 * treeNode] ^ tree[2 * treeNode + 1];
+                else
+                        tree[treeNode] = tree[2 * treeNode] | tree[2 * treeNode + 1];
+        
+        }
+        else
+        {
+ 
+                if((int)floor(log2(treeNode)) % 2 == 0)
+                        tree[treeNode] = tree[2 * treeNode] | tree[2 * treeNode + 1];
+                else
+                        tree[treeNode] = tree[2 * treeNode] ^ tree[2 * treeNode + 1];
+        }
+        
+ 
+ 
+}
+ 
+void updateTree(vector<int> &arr, vector<int> &tree, int index, int value)
+{
+        int nn = 2 * pow(2, n);
+        int indtree = nn/2 + index, ind = indtree, cnt = 0;
+        tree[indtree] = value;
+        assert(indtree != 0);
+        //cout << nn << "  " << indtree << " **** " << endl;
+        while(indtree != 1)
+        {
+                assert(indtree > 0);
+                ind = indtree/2;
+                if(indtree % 2 == 0)
+                {
+                        if(cnt % 2 == 0)
+                                tree[ind] = tree[indtree] | tree[indtree + 1];
+                        else
+                                tree[ind] = tree[indtree] ^ tree[indtree + 1];
+ 
+                }
+                else
+                {
+                        if(cnt % 2 == 0)
+                                tree[ind] = tree[indtree] | tree[indtree - 1];
+                        else
+                                tree[ind] = tree[indtree] ^ tree[indtree - 1];
+                }
+                cnt++;
+                indtree = ind;
+        }
+}
+
+
+
+--------------------------------------------------------------------------------------------------------------
+NOTE (REASON FOR TLE EARLIER):
+important thing to note here is: i got TLE for similiar code, when i passed the vector without reference (&arr). Passing without reference creates a copy everytime which is very time consuming. Hence, always pass through reference. If you for sure dont  want to change its value, you can pass as const (const int &a) also.
+
+==============================================================================================================================================================================
+
+486C - Palindrome Transformation
+
+Assuming that cursor's position is in the first half of string(i.e 1 ≤ p ≤ n / 2) (if it's not, just reverse the string, and change p to n - p + 1, then the answer will not change).
+
+It is not hard to see that, in optimal solution, we only need to move our cusor in the first half of the string only, and the number of "turn" is at most once.
+
+Therefore, we have below algorithm:
+
+Find the largest index r before p in the first half of the string (p ≤ r ≤ n / 2) such that sr different to sn - r + 1. (si denote ith character of our input string s)
+
+Find the smallest index l after p (1 ≤ l ≤ p) such that sl different to sn - l + 1.
+
+In optimal solution, we move our cusor from p to l and then from l to r, or move from p to r and then from r to l. While moving, we also change character of string simultaneously (if needed) (by press up/down arrow keys).
+
+Be careful with some corner case(for example, does'nt exist such l or r discribed above).
+
+
+==============================================================================================================================================================================
+
+377A. Maze
+
+Important questiong of dfs, in which we dont apply the dfs traditionally like we always do using vector<vector<int>> g. This is dfs question, but slightly different and hence IMPORTANT TO REALIZE THIS DFS.
+
+
+trick:
+
+Start BFS or DFS from any free cell. As the maze is connected, this search will visit all s free cells. But we can stop the search when it visits s - k free cells. It's obvious that these s - k cells are connected to each other. Remaining k cells can be transformed into the walls.
+
+Solutions which every move transform the cell which has the minimal number of neighbours passed pretests. However, it's wrong. Here is the counter-test:
+
+....
+.#..
+..##
+..##
+Top-left cell has no more neighbours than any other cell but we cannot transform it into the wall.
+
+
+
+for code:  https://www.programmersought.com/article/7040358832/
+==============================================================================================================================================================================
+
+441C. Valera and Tubes
+
+exactly similiar logic as prev question. Important dfs question.
+
+for code: https://github.com/debsourav33/CodeForces-Problem-Solutions/blob/master/441C-%20Valera%20and%20Tubes.cpp
+
+
+==============================================================================================================================================================================
+
+1365D. Solve The Maze
+
+We need to find the shortest path from one vertex (n, m) to every other vertex. So its a dijkstras problem. And this type of "GRID" questions you shall solve using the dr[] = {0,0,-1,1} and dc[] = {1, -1, 0, 0}.
+
+trick:
+
+Key Idea:
+We can block all empty neighbouring cells of bad people and then check if all good people can escape and no bad people are able to escape.
+
+==============================================================================================================================================
+
+601A
+
+The Two Routes
+The condition that the train and bus can't meet at one vertex except the final one is just trolling. If there's a railway , then the train can take it and wait in town N. If there's no such railway, then there's a road , the bus can take it and wait in N instead. There's nothing forbidding this :D.
+
+==============================================================================================================================================
+
+1037D. Valid BFS?
+
+We need to check if that given bfs sequence is valid
+So we maintain a pointer(p), which goes throught hisbfs array and if at any point the given vertex (the next vertex we are pointing at) is impossible to approach from our current node (vertex) , we set the flag to 1, which means its impossible and return. Else its possible. My code:
+
+void bfs(int node, const vector<int> &hisbfs)
+{
+        queue<int> q;
+        q.push(node);
+        int p = 0;
+        p++;
+        while(!q.empty())
+        {
+                int e = q.front();
+                q.pop();
+                vis[e] = 1;
+                set<int> nbrs;
+                int c = 0;
+                for(auto j : g[e])
+                {
+                        if(!vis[j])
+                        {
+                                nbrs.insert(j);
+                                c++;
+                        }
+                }
+
+                while(c--)
+                {
+                        if(p >= n)
+                                return;
+                        if(!nbrs.count(hisbfs[p]))
+                        {
+                                f = 1;
+                                return;
+                        }
+                        else
+                        {
+                                vis[hisbfs[p]] = 1;
+                                q.push(hisbfs[p]);
+                                p++;
+                        }
+                }
+ 
+        }
+}
+
+==============================================================================================================================================
+
+295B. Greg and Graph
+
+Concept: Floyd Warshall
+To avoid doing O(v^4), we use this trick to do it in O(v^3) itself:
+
+https://github.com/fazlulkabir94/Codeforces/blob/master/B.%20Greg%20and%20Graph.cpp
+
+
+==============================================================================================================================================
+
+339C. Xenia and Weights
+
+-------------------------------------------------editorial---------------------------------------------------------------
+Let's consider the definition of balance. Balance is the difference between sum of all weights on the left pan and sum of all weights on the right pan. At the beginning balance is equal to 0. Att each step Xenia puts one weight on the pan. It means she adds to or substracts from balance integer from 1 to 10. In each odd step, the integer is added and in each even step the integer is subtracted. From the statement we know, that after each step, balance must change it sign and must not be equal to 0. So if after some step the absolute value of balance is greater than 10, Xenia can not continue. Also, it is said in the statement that we can not use two equal weigths in a row. To solve the problem, let's consider a graph, where vertices are tuples of three numbers (i, j, k), where i is a current balance, j is a weight, used in the previous step, and k is the number of the current step. Arcs of the graph must correspond to Xenias actions, described in the statement. The solution of the problme is a path from vertex (0, 0, 1) to some vertex (x, y, m), where x, y are any numbers, and m is the requared number of steps.
+----------------------------------------------my editorial------------------------------------------------------------------------
+
+This was a very nice dfs type dp question accompanied by few observations.
+First of all we notice that if the difference at any point of time is greater than 10 then the state cannot be
+continued. 
+Suppose the weight configuration in the pan is (16,20,10) where 16 is the sum of weight in left pan, 20 is the sum 
+of weight in right pan and last used weight is 10 this can be simplified to the state as (4,10,number of steps) 
+where 4 is the difference and 10 is the last used weight in right pan. So we keep a state 
+dp[difference][last used weight][number of steps]. And whenever we assign a new weight we want the present weight
+to be greater than the difference. 
+
+==============================================================================================================================================
+
+350C. Bombs
+
+Main thing in this question is the mysort question:
+
+bool mysort(pair<int, int> a, pair<int, int> b)
+{
+        if(abs(a.first) != abs(b.first))
+                return abs(a.first) < abs(b.first);
+        return abs(a.second) < abs(b.second);
+}
+
+==============================================================================================================================================
+
+466C - Number of Ways
+
+This can be easily done in O(n^2), but that will TLE. So, solution with O(n) can be done by storing number of j's starting from the right for which it holds, store in an array. Then iterate from i 0 to n-2 and see for each i how many are there in the other array. this is order of n solution.
+
+
+
+Let’s create an array cnt[], where cnt[i] equals 1, if the sum of elements from i-th to n-th equals  and 0 — otherwise. Now, to calculate the answer we have to find the sum cnt[j] + cnt[j+1] + ... + cnt[n] faster then O(n). There are a lot of required ways to do this, but the easiest one is to create a new additional array sums[] where in j-th element will be cnt[j] + cnt[j+1] + ... + cnt[n]. It is easy to calculate in such way: sums[n] = cnt[n], sums[i] = sums[i+1] + cnt[i] (i < n).
+
+Thus, we receive very simple solution: for each prefix of initial array 1..i with the sum that equals  we need to add to the answer sums[i+2].
+
+Complexity: O(n)
+
+==============================================================================================================================================
+
+493C. Vasya and Basketball
+
+Realize the ranges of n and m and then use right data structure to achieve the right time complexity. We use set with n and m values and hence my code works in complexity n * logn
+, (nlogn + mlogm). Though, the prev solution was of order ai * logn which was timing out becuase range of ai is upto 10^9.
+
+==============================================================================================================================================
+
+463C - Gargari and Bishops. 
+
+We preprocess the sum for all the diagonals(principals and secondary diagonals) in two arrays(so that for every element i,j we can find sum of elements which are attacked in O(1) time).Also for avoiding the intersection,we need to find two cells so that for one the sum of row and column is even and for the other one the sum of row and column is odd.Finally,we analyze every cell ,we see if the sum of row and column is even or odd,and update that two positions(solutions).
+
+==============================================================================================================================================
+
+Agressive cows (SPOJ)
+
+Binary Search
+
+
+
+
+#include<bits/stdc++.h>
+#include<assert.h>
+using namespace std;
+#define ll long long int
+
+int n, k;
+int v[200001];
+
+int isvalid(int val)
+{
+        int sum = 1, prev = v[0];
+        for(int i = 1; i < n; i++)
+        {
+                if(v[i] - prev >= val)
+                {
+                        sum++;
+                        prev = v[i];
+                }
+        }
+        return sum >= k;
+}
+
+int main()
+{
+
+#ifndef ONLINE_JUDGE
+freopen("input.txt", "r", stdin);
+freopen("output2.txt", "w", stdout);
+#endif
+
+        ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+        ll nn, i, j = 0, nm = 0, cou = 0, sum = 0;
+        ll mx = INT_MIN, mn = INT_MAX, lz=0, rz=0, ro=INT_MAX, mi = 0;
+        ll mid, nk, m, amt;
+        ll x, y, z = 0, merged = 0, add = 0, minval = INT_MAX, mini = 0, t;
+        cin >> t;
+        while(t--)
+        {
+        cin >> n >> k;
+        for(i = 0; i < n; i++)
+        {
+                cin >> v[i];
+        }
+        int lo = 0, hi = 1e9, ans = 0;
+        while(lo <= hi)
+        {
+                int mid = lo + (hi - lo)/2;
+                if(isvalid(mid))
+                {
+                        ans = mid;
+                        lo = mid + 1;
+                }
+                else
+                        hi = mid - 1;
+
+        }
+        cout << ans << endl;
+}
+}
+
+==============================================================================================================================================
+
+1370D. Odd-Even Subsequence
+
+We need to minimize, concept to use is Binary Search.
+
+Key Idea:
+
+Binary search over the answer and check if given x, it is possible to form a subsequence of length at least k such that either all elements at odd indices or even indices are ≤x.
+
+Solution:
+
+Let us binary search over the answer and fix if the answer comes from elements at odd or even indices in the subsequence. Suppose we want to find if there exists a subsequence of length at least k such that the elements at odd indices are ≤x. We will construct the subsequence greedily.
+
+Let's iterate on the array from left to right. Suppose we are at index i in the array and the current length of the subsequence formed is l. If l is odd, the next added element would be at an even index. In this case, we do not care about what this element is as we only want elements at odd indices to be ≤x. So, in this case, we add ai to the subsequence. If l is even, then the next added element would be at an odd index, so, it must be ≤x. If ai≤x, we can add ai to the subsequence, otherwise we do not add ai to the subsequence and continue to the next element in a.
+
+Note that we can do a similar greedy construction for elements at even indices. If the length of the subsequence formed is ≥k (either by construction from odd indices or even indices), then the answer can be equal to x and we can reduce the upper bound of the binary search otherwise we increase the lower bound.
+
+Time Complexity - O(n⋅log2(Ai)) or O(n⋅log2(n))
+
+
+==============================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+ 

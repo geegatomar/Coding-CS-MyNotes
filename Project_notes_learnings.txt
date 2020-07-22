@@ -1,0 +1,19 @@
+challenge of not being able to send the image from server to the colab notebook programmatically. Plan was to send from server to google drive and then to colab notebook. But this had lot of authentication authorization steps which were not able/easy to program. 
+
+The solution to this is to use "ngrok" which allows you to host your flask on the same server as the google colab notebook. 
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Next challenge was that the wrong transformed image was being displayed after all this. This was because the browser was storing the previously created "transformed.jpg" in the cache disk (as seen by the Developer tools options on chrome) and hence the correct transformed image was not being displayed (though it was being overwritten in the server) (but it wasnt being displayed as browser never sent a query asking the server for it as it already found it in browser cache)
+
+To fix this, I used "import uuid" to generate a random name for the file. This solved two problems:
+1. Everytime the file names were different, hence it would not find it in cache and would send http request to server to send the right image file.
+2. If two people were accessing the website at same time, and if images were not randomized, it would cause a clash in between and hence cause unexpected results or delay in query.  
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+When we type the website name and enter, each website has a unique IP adress associated with it and it will look for the server correspoding to this ip adress. So a "http request" is sent to the server. The server returns a "http response" to the browser back and will display the corresponding html page as we have coded in the flask python file.
+@app.route('/') means that when the user is at the website, then execute the function just below it. 
+
+ 
